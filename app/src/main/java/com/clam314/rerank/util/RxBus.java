@@ -1,4 +1,4 @@
-package util;
+package com.clam314.rerank.util;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
