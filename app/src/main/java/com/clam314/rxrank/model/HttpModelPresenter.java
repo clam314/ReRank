@@ -1,0 +1,18 @@
+package com.clam314.rxrank.model;
+
+import com.clam314.rxrank.entity.Item;
+
+import java.util.List;
+
+import io.reactivex.Observable;
+
+/**
+ * Created by clam314 on 2017/3/31
+ */
+
+public interface HttpModelPresenter {
+
+    Observable<List<Item>> loadCategory(String category, int size, int page);
+
+    Observable<List<String>> loadHistoryDays();
+}

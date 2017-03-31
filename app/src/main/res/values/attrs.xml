@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="toolbarColor" format="color"/>
+    <attr name="toolbarColor" format="color|reference"/>
     <attr name="textColorLight" format="color"/>
     <attr name="textColorDark" format="color"/>
     <attr name="listItemReaded" format="color|reference"/>
