@@ -9,102 +9,102 @@ import java.util.List;
  * Created by clam314 on 2017/3/30
  */
 
-public class CategoryResult {
+public class CategoryGroup {
 
     @SerializedName("Android")
     @Expose
-    private List<Result> Android;
+    private List<Item> Android;
 
     @SerializedName("iOS")
     @Expose
-    private List<Result> iOS;
+    private List<Item> iOS;
 
     @SerializedName("福利")
     @Expose
-    private List<Result>  welfare;
+    private List<Item>  welfare;
 
     @SerializedName("前端")
     @Expose
-    private List<Result>  frontEnd;
+    private List<Item>  frontEnd;
 
     @SerializedName("App")
     @Expose
-    private List<Result> app;
+    private List<Item> app;
 
     @SerializedName("拓展资源")
     @Expose
-    private List<Result> resource;
+    private List<Item> resource;
 
     @SerializedName("瞎推荐")
     @Expose
-    private List<Result> recommend;
+    private List<Item> recommend;
 
     @SerializedName("休息视频")
     @Expose
-    private List<Result> video;
+    private List<Item> video;
 
 
-    public List<Result> getAndroid() {
+    public List<Item> getAndroid() {
         return Android;
     }
 
-    public void setAndroid(List<Result> android) {
+    public void setAndroid(List<Item> android) {
         Android = android;
     }
 
-    public List<Result> getiOS() {
+    public List<Item> getiOS() {
         return iOS;
     }
 
-    public void setiOS(List<Result> iOS) {
+    public void setiOS(List<Item> iOS) {
         this.iOS = iOS;
     }
 
-    public List<Result> getWelfare() {
+    public List<Item> getWelfare() {
         return welfare;
     }
 
-    public void setWelfare(List<Result> welfare) {
+    public void setWelfare(List<Item> welfare) {
         this.welfare = welfare;
     }
 
-    public List<Result> getFrontEnd() {
+    public List<Item> getFrontEnd() {
         return frontEnd;
     }
 
-    public void setFrontEnd(List<Result> frontEnd) {
+    public void setFrontEnd(List<Item> frontEnd) {
         this.frontEnd = frontEnd;
     }
 
-    public List<Result> getApp() {
+    public List<Item> getApp() {
         return app;
     }
 
-    public void setApp(List<Result> app) {
+    public void setApp(List<Item> app) {
         this.app = app;
     }
 
-    public List<Result> getResource() {
+    public List<Item> getResource() {
         return resource;
     }
 
-    public void setResource(List<Result> resource) {
+    public void setResource(List<Item> resource) {
         this.resource = resource;
     }
 
-    public List<Result> getRecommend() {
+    public List<Item> getRecommend() {
         return recommend;
     }
 
-    public void setRecommend(List<Result> recommend) {
+    public void setRecommend(List<Item> recommend) {
         this.recommend = recommend;
     }
 
-    public List<Result> getVideo() {
+    public List<Item> getVideo() {
         return video;
     }
 
-    public void setVideo(List<Result> video) {
+    public void setVideo(List<Item> video) {
         this.video = video;
     }
 }
