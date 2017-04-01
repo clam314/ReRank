@@ -10,34 +10,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.clam314.rxrank.MainApplication;
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.adapter.CategoryAdapter;
+import com.clam314.rxrank.adapter.LoadMoreViewHolder;
 import com.clam314.rxrank.adapter.LoadMoreWrapperAdapter;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.http.Category;
-import com.clam314.rxrank.model.HttpModelPresenter;
-import com.clam314.rxrank.model.HttpModelPresenterImpl;
+import com.clam314.rxrank.presenter.DataPresenter;
+import com.clam314.rxrank.util.DeBugLog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class CategoryFragment extends BaseFragment {
+    private static final String TAG = CategoryFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "param1";
     private String mCategory;
     private List<Item> mItems;
+    private int pageNo = 0;
 
     @BindView(R.id.rv_category)
     RecyclerView recyclerView;
 
-    private RecyclerView.Adapter moreAdapter;
+    private LoadMoreWrapperAdapter moreAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -70,43 +71,64 @@ public class CategoryFragment extends BaseFragment {
 
     @Override
     protected void initView(View view) {
-        moreAdapter = new LoadMoreWrapperAdapter(getContext(),new CategoryAdapter(mItems));
+        moreAdapter = new LoadMoreWrapperAdapter(new CategoryAdapter(mItems));
+        moreAdapter.setLoadStatusViewHolder(LoadMoreViewHolder.newInstance(view.getContext()),null,null);
+        moreAdapter.setOnLoadListener(new LoadMoreWrapperAdapter.OnLoadListener() {
+            @Override
+            public void onRetry() {
+                loadData(pageNo);
+            }
+
+            @Override
+            public void onLoadMore() {
+                DeBugLog.logDebug(TAG,"load data onLoadMore() page:"+ pageNo);
+                loadData(pageNo);
+            }
+        });
+
         recyclerView.setAdapter(moreAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
     }
 
     @Override
     protected void doAfterInitView(View view) {
-        loadData(0);
+        loadData(pageNo);
     }
 
-    private void loadData(int page){
-        HttpModelPresenter httpModelPresenter = new HttpModelPresenterImpl();
-        Observable<List<Item>> observable = httpModelPresenter.loadCategory(mCategory,10,page);
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Item>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+    private void loadData(final int page){
+        MainApplication.getInstance().getPresenter(DataPresenter.class).loadCategoryContents(new Observer<List<Item>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                pageNo++;
+                DeBugLog.logDebug(TAG,"load data onSubscribe() page:"+ pageNo);
+            }
 
-                    }
+            @Override
+            public void onNext(List<Item> items) {
+                if(items == null || items.size() == 0 ){
+                    moreAdapter.showLoadComplete();
+                    DeBugLog.logDebug(TAG,"load data showLoadComplete() page:"+ pageNo);
+                }else {
+                    mItems.addAll(items);
+                    moreAdapter.disableLoadMore();
+                    DeBugLog.logDebug(TAG,"load data disableLoadMore() page:"+ pageNo);
+                }
+            }
 
-                    @Override
-                    public void onNext(List<Item> items) {
-                        mItems.addAll(items);
-                        moreAdapter.notifyDataSetChanged();
-                    }
+            @Override
+            public void onError(Throwable e) {
+                pageNo--;
+                moreAdapter.showLoadError();
+                DeBugLog.logError(TAG,"load data error: "+  e.getMessage());
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
+            @Override
+            public void onComplete() {
+                DeBugLog.logDebug(TAG,"load data onComplete() page:"+ pageNo);
+            }
 
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        },mCategory,10,page);
     }
 
     @Override

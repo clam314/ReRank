@@ -4,7 +4,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import com.clam314.rxrank.util.DeBugLog;
+
 public abstract class LoadMoreScrollListener extends RecyclerView.OnScrollListener {
+    private static final String TAG = LoadMoreScrollListener.class.getSimpleName();
 
     private static final int TYPE_LINEAR_LAYOUT = 11;
     private static final int TYPE_GRID_LAYOUT = 12;
@@ -66,6 +69,9 @@ public abstract class LoadMoreScrollListener extends RecyclerView.OnScrollListen
         int visibleItemCount = layoutManager.getChildCount();
         int totalItemCount = layoutManager.getItemCount();
 
+        DeBugLog.logDebug(TAG,"-isLoading: "+ isLoading + " -totalItemCount: "+totalItemCount
+                + " -previousTotal: "+ previousTotal+" -State: "+newState);
+
         if (isLoading) {
             if (totalItemCount > previousTotal) {//加载更多结束
                 isLoading = false;
@@ -81,6 +87,7 @@ public abstract class LoadMoreScrollListener extends RecyclerView.OnScrollListen
                 && visibleItemCount > 0
                 && totalItemCount - 1 == lastVisibleItemPosition
                 && newState == RecyclerView.SCROLL_STATE_IDLE) {
+            DeBugLog.logDebug(TAG, "loadmorelistener start loadMore");
             loadMore();
         }
 

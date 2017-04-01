@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.clam314.rxrank.util.DeBugLog;
+
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -22,12 +24,9 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static final int ITEM_TYPE_LOAD_MORE_VIEW = Integer.MAX_VALUE - 3;
     public static final int ITEM_TYPE_NO_VIEW = Integer.MAX_VALUE - 4;//不展示footer view
 
-    private Context mContext;
-    private RecyclerView.Adapter mInnerAdapter;
+    private RecyclerView.Adapter<RecyclerView.ViewHolder> mInnerAdapter;
 
-    private View mLoadMoreView;
-    private View mLoadMoreFailedView;
-    private View mNoMoreView;
+    private RecyclerView.ViewHolder mLoadMoreHolder,mLoadFailedHolder,mLoadNoMoreHolder;
 
     private int mCurrentItemType = ITEM_TYPE_LOAD_MORE_VIEW;
     private LoadMoreScrollListener mLoadMoreScrollListener;
@@ -35,15 +34,18 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     private boolean isLoadError = false;//标记是否加载出错
     private boolean isHaveStatesView = true;
+    private boolean isLoadComplete = false;
+    private boolean isLoading = true;
 
-    public LoadMoreWrapperAdapter(Context context, RecyclerView.Adapter adapter) {
-        this.mContext = context;
+    public LoadMoreWrapperAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
         this.mInnerAdapter = adapter;
         mLoadMoreScrollListener = new LoadMoreScrollListener() {
             @Override
             public void loadMore() {
-                if (mOnLoadListener != null && isHaveStatesView) {
-                    if (!isLoadError) {
+                DeBugLog.logDebug("load"," LoadMoreWrapperAdapter loadMore()"+" -isHaveStatesView: "+isHaveStatesView);
+                if (mOnLoadListener != null) {
+                    if (!isLoadError && !isLoadComplete && !isLoading) {
+                        DeBugLog.logDebug("load"," LoadMoreWrapperAdapter start loadMore()");
                         showLoadMore();
                         mOnLoadListener.onLoadMore();
                     }
@@ -56,6 +58,7 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mCurrentItemType = ITEM_TYPE_LOAD_MORE_VIEW;
         isLoadError = false;
         isHaveStatesView = true;
+        isLoading = true;
         notifyItemChanged(getItemCount());
     }
 
@@ -63,6 +66,7 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mCurrentItemType = ITEM_TYPE_LOAD_FAILED_VIEW;
         isLoadError = true;
         isHaveStatesView = true;
+        isLoading = false;
         notifyItemChanged(getItemCount());
     }
 
@@ -70,49 +74,44 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mCurrentItemType = ITEM_TYPE_NO_MORE_VIEW;
         isLoadError = false;
         isHaveStatesView = true;
+        isLoadComplete = true;
+        isLoading = false;
         notifyItemChanged(getItemCount());
     }
 
     public void disableLoadMore() {
         mCurrentItemType = ITEM_TYPE_NO_VIEW;
         isHaveStatesView = false;
+        isLoading = false;
         notifyDataSetChanged();
     }
 
-    //region Get ViewHolder
-    private ViewHolder getLoadMoreViewHolder() {
-        if (mLoadMoreView == null) {
-            mLoadMoreView = new TextView(mContext);
-            mLoadMoreView.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-            mLoadMoreView.setPadding(20, 20, 20, 20);
-            ((TextView) mLoadMoreView).setText("正在加载中");
-            ((TextView) mLoadMoreView).setGravity(Gravity.CENTER);
-        }
-        return ViewHolder.createViewHolder(mContext, mLoadMoreView);
+    public void setLoadStatusViewHolder(RecyclerView.ViewHolder loadMore, RecyclerView.ViewHolder loadFailed, RecyclerView.ViewHolder loadNoMore){
+        if(loadMore != null) mLoadMoreHolder = loadMore;
+        if(loadFailed != null) mLoadFailedHolder = loadFailed;
+        if(loadNoMore != null) mLoadNoMoreHolder = loadNoMore;
     }
 
-    private ViewHolder getLoadFailedViewHolder() {
-        if (mLoadMoreFailedView == null) {
-            mLoadMoreFailedView = new TextView(mContext);
-            mLoadMoreFailedView.setPadding(20, 20, 20, 20);
-            mLoadMoreFailedView.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-            ((TextView) mLoadMoreFailedView).setText("加载失败，请点我重试");
-            ((TextView) mLoadMoreFailedView).setGravity(Gravity.CENTER);
+    private RecyclerView.ViewHolder getLoadMoreViewHolder(Context context) {
+        if(mLoadMoreHolder == null){
+            mLoadMoreHolder = LoadStatusViewHolder.getDefaultHolder(context,"正在加载中");
         }
-        return ViewHolder.createViewHolder(mContext, mLoadMoreFailedView);
+        return mLoadMoreHolder;
     }
 
-    private ViewHolder getNoMoreViewHolder() {
-        if (mNoMoreView == null) {
-            mNoMoreView = new TextView(mContext);
-            mNoMoreView.setPadding(20, 20, 20, 20);
-            mNoMoreView.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-            ((TextView) mNoMoreView).setText("--end--");
-            ((TextView) mNoMoreView).setGravity(Gravity.CENTER);
+    private RecyclerView.ViewHolder getLoadFailedViewHolder(Context context) {
+        if(mLoadFailedHolder == null){
+            mLoadFailedHolder = LoadStatusViewHolder.getDefaultHolder(context,"加载出错,点击重试");
         }
-        return ViewHolder.createViewHolder(mContext, mNoMoreView);
+        return mLoadFailedHolder;
     }
-    //endregion
+
+    private RecyclerView.ViewHolder getNoMoreViewHolder(Context context) {
+        if(mLoadNoMoreHolder == null){
+            mLoadMoreHolder = LoadStatusViewHolder.getDefaultHolder(context,"——end——");
+        }
+        return mLoadNoMoreHolder;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -125,19 +124,20 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_NO_MORE_VIEW) {
-            return getNoMoreViewHolder();
+            return getNoMoreViewHolder(parent.getContext());
         } else if (viewType == ITEM_TYPE_LOAD_MORE_VIEW) {
-            return getLoadMoreViewHolder();
+            return getLoadMoreViewHolder(parent.getContext());
         } else if (viewType == ITEM_TYPE_LOAD_FAILED_VIEW) {
-            return getLoadFailedViewHolder();
+            return getLoadFailedViewHolder(parent.getContext());
         }
         return mInnerAdapter.onCreateViewHolder(parent, viewType);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == ITEM_TYPE_LOAD_FAILED_VIEW) {
-            mLoadMoreFailedView.setOnClickListener(new View.OnClickListener() {
+        if (holder.getItemViewType() == ITEM_TYPE_LOAD_FAILED_VIEW
+                && holder instanceof LoadStatusViewHolder) {
+            ((LoadStatusViewHolder)holder).itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mOnLoadListener != null) {
@@ -211,7 +211,6 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public boolean isFooterType(int type) {
-
         return type == ITEM_TYPE_NO_VIEW
                 || type == ITEM_TYPE_LOAD_FAILED_VIEW
                 || type == ITEM_TYPE_NO_MORE_VIEW
@@ -232,4 +231,25 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return this;
     }
 
+
+    /*
+    *加载状态的ViewHolder的父类,需要自定义加载状态的viewHolder请继承该类
+    *
+    **/
+    public static class LoadStatusViewHolder extends RecyclerView.ViewHolder{
+        View itemView;
+        public LoadStatusViewHolder(View itemView) {
+            super(itemView);
+            this.itemView = itemView;
+        }
+
+        public static RecyclerView.ViewHolder getDefaultHolder(Context context,String text){
+            TextView view = new TextView(context);
+            view.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            view.setPadding(20, 20, 20, 20);
+            view.setText(text);
+            view.setGravity(Gravity.CENTER);
+            return new LoadStatusViewHolder(view);
+        }
+    }
 }
