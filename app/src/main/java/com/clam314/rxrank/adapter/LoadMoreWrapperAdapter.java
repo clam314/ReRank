@@ -156,35 +156,25 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         mInnerAdapter.onAttachedToRecyclerView(recyclerView);
+        //recyclerView setAdapter的时候就会回调这方法，要是setLayoutManager不在之前设置，这里getLayoutManager就为null
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        DeBugLog.logError("recycler","layoutManager == null "+ (layoutManager == null));
         if(layoutManager instanceof GridLayoutManager){
             final GridLayoutManager gridLayoutManager = (GridLayoutManager)layoutManager;
+            final GridLayoutManager.SpanSizeLookup oldSizeLookup = gridLayoutManager.getSpanSizeLookup();
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
                     if(position == getItemCount() - 1 && isHaveStatesView){
                         return gridLayoutManager.getSpanCount();
                     }
-                    if(gridLayoutManager.getSpanSizeLookup() != null && isHaveStatesView){
-                        return gridLayoutManager.getSpanSizeLookup().getSpanSize(position);
+                    if(oldSizeLookup != null){
+                        return oldSizeLookup.getSpanSize(position);
                     }
                     return 1;
                 }
             });
         }
-
-//        WrapperUtils.onAttachedToRecyclerView(mInnerAdapter, recyclerView, new WrapperUtils.SpanSizeCallback() {
-//            @Override
-//            public int getSpanSize(GridLayoutManager layoutManager, GridLayoutManager.SpanSizeLookup oldLookup, int position) {
-//                if (position == getItemCount() - 1 && isHaveStatesView) {
-//                    return layoutManager.getSpanCount();
-//                }
-//                if (oldLookup != null && isHaveStatesView) {
-//                    return oldLookup.getSpanSize(position);
-//                }
-//                return 1;
-//            }
-//        });
         recyclerView.addOnScrollListener(mLoadMoreScrollListener);
     }
 

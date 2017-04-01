@@ -25,6 +25,10 @@ public abstract class LoadMoreScrollListener extends RecyclerView.OnScrollListen
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        /*
+        * 其实GridLayoutManager就是继承自LinearLayoutManager，两类的处理可以合并成一起，
+        * 但便于理解和可读性，进行了分开处理
+        * */
         if(layoutManagerType == -1){
             if(layoutManager instanceof GridLayoutManager){
                 layoutManagerType = TYPE_GRID_LAYOUT;
@@ -49,11 +53,13 @@ public abstract class LoadMoreScrollListener extends RecyclerView.OnScrollListen
                 if(lastPositions == null){
                     lastPositions = new int[staggeredGridLayoutManager.getSpanCount()];
                 }
+                //针对瀑布流布局，需要遍历每一列最后一个，寻找最后的位置
                 staggeredGridLayoutManager.findLastVisibleItemPositions(lastPositions);
                 lastVisibleItemPosition = findMax(lastPositions);
                 break;
         }
     }
+
 
     private int findMax(int[] lastPositions){
         int max = lastPositions[0];
@@ -80,7 +86,7 @@ public abstract class LoadMoreScrollListener extends RecyclerView.OnScrollListen
                 previousTotal = totalItemCount;
                 isLoading = false;
             }else {
-                //TODO 加载失败的问题，暂没解决
+                //TODO 目前此类无法对加载失败进行自动处理，需要外部动作
             }
         }
         if (!isLoading
