@@ -12,7 +12,6 @@ import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.clam314.rxrank.util.StringUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.BasePostprocessor;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         holder.tvAvatar.setText(StringUtil.getCharFromString(item.getWho(),0));
         holder.tvName.setText("· "+StringUtil.getShowStringNotNull(item.getWho()));
         holder.tvDescribe.setText(StringUtil.getShowStringNotNull(item.getDesc()));
-        holder.tvTime.setText(StringUtil.getStringBeforePositon(item.getPublishedAt(),10));
+        holder.tvTime.setText(StringUtil.getStringBeforePosition(item.getPublishedAt(),10));
         if(item.getImages() != null && item.getImages().size() > 0){
             String url = item.getImages().get(0);
             holder.draweeView.setVisibility(View.VISIBLE);

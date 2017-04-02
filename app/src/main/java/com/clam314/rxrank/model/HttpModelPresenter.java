@@ -1,5 +1,6 @@
 package com.clam314.rxrank.model;
 
+import com.clam314.rxrank.entity.CategoryGroup;
 import com.clam314.rxrank.entity.Item;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface HttpModelPresenter {
     Observable<List<Item>> loadCategory(String category, int size, int page);
 
     Observable<List<String>> loadHistoryDays();
+
+    Observable<CategoryGroup> loadDay(String day);
 }

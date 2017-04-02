@@ -45,14 +45,20 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initView(View view) {
         List<String> titles = new ArrayList<>();
+        titles.add("每日合集");
         titles.add(Category.android);
         titles.add(Category.iOS);
         titles.add(Category.frontEnd);
         titles.add(Category.resource);
         titles.add(Category.app);
+        titles.add(Category.recommend);
         fragments = new ArrayList<>();
         for(String s : titles){
-            fragments.add(CategoryFragment.newInstance(s));
+            if(s.equals("每日合集")){
+                fragments.add(DayFragment.newInstance());
+            }else {
+                fragments.add(CategoryFragment.newInstance(s));
+            }
         }
         TabAdapter tabAdapter = new TabAdapter(titles,fragments,getChildFragmentManager());
         viewPager.setAdapter(tabAdapter);

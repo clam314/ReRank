@@ -1,5 +1,6 @@
 package com.clam314.rxrank.model;
 
+import com.clam314.rxrank.entity.CategoryGroup;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.http.Api;
 import com.clam314.rxrank.http.HttpUtil;
@@ -28,5 +29,10 @@ public class HttpModelPresenterImpl implements HttpModelPresenter{
     @Override
     public Observable<List<String>> loadHistoryDays() {
         return HttpUtil.filterStatus(mDataService.getHistoryDay());
+    }
+
+    @Override
+    public Observable<CategoryGroup> loadDay(String day) {
+        return HttpUtil.filterStatus(mDataService.getDayData(day));
     }
 }

@@ -96,12 +96,14 @@
                 android:layout_marginBottom="20dp"
                 android:textSize="14sp"
                 android:text="time"/>
+
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/iv_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:minHeight="150dp"
+                fresco:viewAspectRatio="1.77"
                 />
         </LinearLayout>
 
