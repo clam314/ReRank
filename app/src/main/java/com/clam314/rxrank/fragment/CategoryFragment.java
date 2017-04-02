@@ -33,9 +33,11 @@ import io.reactivex.disposables.Disposable;
 public class CategoryFragment extends BaseFragment {
     private static final String TAG = CategoryFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "param1";
+    private static final String SAVE_ITEM_LIST = "mItems";
+    private static final String SAVE_PAGE_NO = "pageNo";
     private String mCategory;
-    private List<Item> mItems;
-    private int pageNo = 0;
+    private ArrayList<Item> mItems;
+    private int pageNo = 1;
 
     @BindView(R.id.rv_category)
     RecyclerView recyclerView;
@@ -58,12 +60,23 @@ public class CategoryFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DeBugLog.logWarning(TAG,mCategory+" onCreate"+ " savedInstanceState null: " +(savedInstanceState == null));
+
         if (getArguments() != null) {
             mCategory = getArguments().getString(ARG_PARAM1);
         }else {
             mCategory = Category.all;
         }
-        mItems = new ArrayList<>();
+        if(savedInstanceState != null){
+            mItems = savedInstanceState.getParcelableArrayList(SAVE_ITEM_LIST);
+            pageNo = savedInstanceState.getInt(SAVE_PAGE_NO);
+            DeBugLog.logWarning(TAG,mCategory+" onCreate savedInstanceState"+ " -itemlist size: "+mItems.size());
+        }
+        if(mItems == null){
+            mItems = new ArrayList<>();
+        }
+
+        DeBugLog.logWarning(TAG,mCategory+" onCreate"+ " -itemlist size: "+mItems.size());
     }
 
     @Override
@@ -83,7 +96,7 @@ public class CategoryFragment extends BaseFragment {
 
             @Override
             public void onLoadMore() {
-                DeBugLog.logDebug(TAG,"load data onLoadMore() page:"+ pageNo);
+                DeBugLog.logDebug(TAG,mCategory+ " load data onLoadMore() page:"+ pageNo);
                 loadData(pageNo);
             }
         });
@@ -92,27 +105,32 @@ public class CategoryFragment extends BaseFragment {
     }
 
     @Override
-    protected void doAfterInitView(View view) {
-        loadData(pageNo);
+    protected void doAfterInitView(View view,@Nullable Bundle savedInstanceState) {
+        DeBugLog.logWarning(TAG,mCategory+" doAfterInitView");
+        if(savedInstanceState==null){
+            loadData(pageNo);
+            DeBugLog.logWarning(TAG,mCategory+" doAfterInitView"+" loaddata page:"+pageNo);
+        }
     }
 
     private void loadData(final int page){
+        DeBugLog.logDebug(TAG,mCategory+" loadData page:"+ pageNo);
         MainApplication.getInstance().getPresenter(DataPresenter.class).loadCategoryContents(new Observer<List<Item>>() {
             @Override
             public void onSubscribe(Disposable d) {
                 pageNo++;
-                DeBugLog.logDebug(TAG,"load data onSubscribe() page:"+ pageNo);
+                DeBugLog.logDebug(TAG,mCategory+" load data onSubscribe() page:"+ pageNo);
             }
 
             @Override
             public void onNext(List<Item> items) {
                 if(items == null || items.size() == 0 ){
                     moreAdapter.showLoadComplete();
-                    DeBugLog.logDebug(TAG,"load data showLoadComplete() page:"+ pageNo);
+                    DeBugLog.logDebug(TAG,mCategory+" load data showLoadComplete() page:"+ pageNo);
                 }else {
                     mItems.addAll(items);
                     moreAdapter.disableLoadMore();
-                    DeBugLog.logDebug(TAG,"load data disableLoadMore() page:"+ pageNo);
+                    DeBugLog.logDebug(TAG,mCategory+" load data disableLoadMore() page:"+ pageNo);
                 }
             }
 
@@ -120,20 +138,29 @@ public class CategoryFragment extends BaseFragment {
             public void onError(Throwable e) {
                 pageNo--;
                 moreAdapter.showLoadError();
-                DeBugLog.logError(TAG,"load data error: "+  e.getMessage());
+                DeBugLog.logError(TAG,mCategory+" load data error: "+  e.getMessage());
             }
 
             @Override
             public void onComplete() {
-                DeBugLog.logDebug(TAG,"load data onComplete() page:"+ pageNo);
+                DeBugLog.logDebug(TAG,mCategory+" load data onComplete() page:"+ pageNo);
             }
 
         },mCategory,10,page);
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(SAVE_ITEM_LIST,mItems);
+        outState.putInt(SAVE_PAGE_NO,pageNo);
+        DeBugLog.logWarning(TAG,mCategory+" onSaveInstanceState"+" -pageNo:"+pageNo+" -mItems:"+mItems.size());
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        DeBugLog.logWarning(TAG,mCategory+" onAttach");
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -145,6 +172,19 @@ public class CategoryFragment extends BaseFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        DeBugLog.logWarning(TAG,mCategory+" onDetach");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        DeBugLog.logWarning(TAG,mCategory+" onDestroyView");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        DeBugLog.logWarning(TAG,mCategory+" onDestroy");
     }
 
     public interface OnFragmentInteractionListener {

@@ -10,7 +10,7 @@ public class Config {
 
     public static final String historyDayUrl = "day/history";
 
-    public static final String categoryUrl = "data/{category}/{size}/{page}";
+    public static final String categoryUrl = "data/{category}/{size}/{page}";//该接口page从1开始
 
     public static final String dayUrl = "day/{day}";
 

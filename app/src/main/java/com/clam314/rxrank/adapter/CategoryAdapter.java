@@ -1,14 +1,18 @@
 package com.clam314.rxrank.adapter;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.entity.Item;
+import com.clam314.rxrank.util.FrescoUtil;
 import com.clam314.rxrank.util.StringUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.BasePostprocessor;
 
 import java.util.List;
 
@@ -39,7 +43,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = View.inflate(parent.getContext(),R.layout.item_list_category,null);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_category,parent,false);
         return new ItemHolder(itemView);
     }
 
@@ -54,13 +58,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private void setData(ItemHolder holder,final Item item){
         holder.tvAvatar.setText(StringUtil.getCharFromString(item.getWho(),0));
-        holder.tvName.setText(StringUtil.getShowStringNotNull(item.getWho()));
+        holder.tvName.setText("· "+StringUtil.getShowStringNotNull(item.getWho()));
         holder.tvDescribe.setText(StringUtil.getShowStringNotNull(item.getDesc()));
-        holder.tvTime.setText(StringUtil.getShowStringNotNull(item.getPublishedAt()));
+        holder.tvTime.setText(StringUtil.getStringBeforePositon(item.getPublishedAt(),10));
         if(item.getImages() != null && item.getImages().size() > 0){
             String url = item.getImages().get(0);
             holder.draweeView.setVisibility(View.VISIBLE);
-            holder.draweeView.setImageURI(url);
+//            holder.draweeView.setImageURI(url);
+            FrescoUtil.loadImage(Uri.parse(url), holder.draweeView, null, 0, 0, null);
         }else {
             holder.draweeView.setVisibility(View.GONE);
         }

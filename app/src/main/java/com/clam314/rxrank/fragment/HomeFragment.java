@@ -50,7 +50,6 @@ public class HomeFragment extends BaseFragment {
         titles.add(Category.frontEnd);
         titles.add(Category.resource);
         titles.add(Category.app);
-        titles.add(Category.resource);
         fragments = new ArrayList<>();
         for(String s : titles){
             fragments.add(CategoryFragment.newInstance(s));

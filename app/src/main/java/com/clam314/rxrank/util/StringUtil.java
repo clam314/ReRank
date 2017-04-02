@@ -23,4 +23,12 @@ public class StringUtil {
             return String.valueOf(s.charAt(position));
         }
     }
+
+    public static String getStringBeforePositon(String s,int position){
+        if(TextUtils.isEmpty(s)|| s.length() < position){
+            return " ";
+        }else {
+            return s.substring(0,position);
+        }
+    }
 }

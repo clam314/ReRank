@@ -25,13 +25,15 @@ public abstract class BaseFragment extends Fragment {
         View view = createView(inflater,container,savedInstanceState);
         unbinder = ButterKnife.bind(this,view);
         initView(view);
-        doAfterInitView(view);
+        doAfterInitView(view,savedInstanceState);
         return view;
     }
 
     protected abstract View createView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
     protected abstract  void initView(View view);
-    protected void doAfterInitView(View view){}
+
+    protected void doAfterInitView(View view, @Nullable Bundle savedInstanceState){}
+    protected void refresh(){}
 
     @Override
     public void onDestroyView() {
@@ -44,7 +46,6 @@ public abstract class BaseFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);

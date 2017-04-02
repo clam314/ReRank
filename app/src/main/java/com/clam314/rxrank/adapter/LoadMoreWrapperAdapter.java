@@ -35,7 +35,7 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private boolean isLoadError = false;//标记是否加载出错
     private boolean isHaveStatesView = true;
     private boolean isLoadComplete = false;
-    private boolean isLoading = true;
+    private boolean isLoading = false;
 
     public LoadMoreWrapperAdapter(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
         this.mInnerAdapter = adapter;
@@ -44,6 +44,7 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             public void loadMore() {
                 DeBugLog.logDebug("load"," LoadMoreWrapperAdapter loadMore()"+" -isHaveStatesView: "+isHaveStatesView);
                 if (mOnLoadListener != null) {
+                    DeBugLog.logDebug("load"," LoadMoreWrapperAdapter loadMore()"+" -error:"+isLoadError+" -complete:"+isLoadComplete+" -loading:"+isLoading);
                     if (!isLoadError && !isLoadComplete && !isLoading) {
                         DeBugLog.logDebug("load"," LoadMoreWrapperAdapter start loadMore()");
                         showLoadMore();
@@ -158,7 +159,6 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mInnerAdapter.onAttachedToRecyclerView(recyclerView);
         //recyclerView setAdapter的时候就会回调这方法，要是setLayoutManager不在之前设置，这里getLayoutManager就为null
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        DeBugLog.logError("recycler","layoutManager == null "+ (layoutManager == null));
         if(layoutManager instanceof GridLayoutManager){
             final GridLayoutManager gridLayoutManager = (GridLayoutManager)layoutManager;
             final GridLayoutManager.SpanSizeLookup oldSizeLookup = gridLayoutManager.getSpanSizeLookup();
