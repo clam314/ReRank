@@ -139,7 +139,6 @@ public class CategoryFragment extends BaseFragment {
             public void onError(Throwable e) {
                 pageNo--;
                 moreAdapter.showLoadError();
-                DeBugLog.logError(TAG,mCategory+" load data error: "+  e.getMessage());
             }
 
             @Override

@@ -15,13 +15,16 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/ab_home"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:elevation="4dp">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tb_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/toolbarColor"
+                android:background="@color/toolbar_background_color"
+                app:title="首页"
+                app:titleTextColor="@color/toolbar_title_color"
                 app:navigationIcon="@drawable/icon_drawer"
                 app:layout_scrollFlags="scroll|enterAlways"/>
 
@@ -29,12 +32,12 @@
                 android:id="@+id/tabs_home"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                app:textAllCaps="false"
+                app:tabTextAppearance="@style/TabLayout_Text_Appearance"
                 app:tabGravity="fill"
-                app:tabSelectedTextColor="?attr/tab_layout_selected_color"
-                app:tabIndicatorColor="?attr/tab_indicator_color"
-                app:tabTextColor="?attr/tab_layout_text_color"
-                app:tabBackground="?attr/tab_layout_color_home"
+                app:tabSelectedTextColor="@color/tabLayout_selected_text_color"
+                app:tabIndicatorColor="@color/tabLayout_indicator_color"
+                app:tabTextColor="@color/tabLayout_text_color"
+                app:tabBackground="@color/tabLayout_background_color"
                 app:tabMode="scrollable"/>
         </android.support.design.widget.AppBarLayout>
 
@@ -52,9 +55,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:layout_marginRight="30dp"
-        android:background="@color/white_dark"
-        app:itemTextColor="@color/black"
-        app:itemIconTint="@color/blue"
         app:headerLayout="@layout/header_navigation_view"
         app:menu="@menu/menu_navigation"
         />

@@ -142,7 +142,6 @@ public class DayFragment extends BaseFragment {
             public void onError(Throwable e) {
                 dayPosition--;
                 moreWrapperAdapter.showLoadError();
-                DeBugLog.logError(TAG,e.getMessage());
             }
 
             @Override

@@ -27,7 +27,21 @@
         <item name="tab_layout_text_color">@color/white</item>
         <item name="tab_indicator_color">@color/white</item>
         <item name="tab_layout_selected_color">@color/white</item>
-
+        
+        <item name="drawerArrowStyle">@style/MyDrawerStyle</item>
     </style>
 
+
+    <style name="TabLayout_Text_Appearance" parent="TextAppearance.Design.Tab">
+        <!--禁止自动大写 -->
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="MyDrawerStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <!-- navigation icon 设置旋转效果-->
+        <item name="spinBars">true</item>
+        <!-- navigation icon 的颜色-->
+        <item name="color">@color/drawer_icon_color</item>
+    </style>
 </resources>

@@ -235,8 +235,9 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         public static RecyclerView.ViewHolder getDefaultHolder(Context context,String text){
             TextView view = new TextView(context);
-            view.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            view.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, 50));
             view.setPadding(20, 20, 20, 20);
+            view.setTextSize(16f);
             view.setText(text);
             view.setGravity(Gravity.CENTER);
             return new LoadStatusViewHolder(view);

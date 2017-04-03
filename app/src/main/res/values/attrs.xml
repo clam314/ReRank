@@ -17,4 +17,15 @@
     <attr name="tab_layout_selected_color" format="color"/>
     <attr name="tab_layout_text_color" format="color"/>
     <attr name="tab_indicator_color" format="color"/>
+
+
+    <attr name="toolbar_background_color" format="color"/>
+    <attr name="toolbar_title_color" format="color"/>
+
+    <attr name="tabLayout_background_color" format="color"/>
+    <attr name="tabLayout_title_color" format="color"/>
+
+    <attr name="navigation_background_color" format="color"/>
+    <attr name="navigation_item_text_color" format="color"/>
+
 </resources>

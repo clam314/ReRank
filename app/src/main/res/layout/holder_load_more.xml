@@ -11,8 +11,8 @@
         android:layout_height="50dp"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center"
-        android:src="@mipmap/ic_refresh_white_24dp"
+        android:src="@drawable/vector_icon_refresh"
         android:padding="5dp"
         android:scaleType="fitCenter"
-        android:tint="@color/blue"/>
+        android:tint="@color/colorPrimary"/>
 </LinearLayout>

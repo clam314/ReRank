@@ -194,7 +194,8 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 tv.setText("Title");
                 tv.setTextSize(22f);
                 tv.getPaint().setFakeBoldText(true);
-                tv.setTextColor(Color.BLACK);
+                int color = context.getResources().getColor(R.color.item_category_title_color);
+                tv.setTextColor(color);
                 Drawable drawable = context.getResources().getDrawable(R.drawable.vector_icon_label);
                 drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
                 tv.setCompoundDrawables(drawable,null,null,null);

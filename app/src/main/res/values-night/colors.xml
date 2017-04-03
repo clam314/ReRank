@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ef9a9a</color>
+    <color name="colorPrimary">#263238</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
@@ -22,21 +22,21 @@
     <color name="red">#c63c3c</color>
     <color name="coffee">#534949</color>
 
-    <color name="toolbar_background_color">#ef9a9a</color>
+    <color name="toolbar_background_color">#263238</color>
     <color name="toolbar_title_color">#ffffff</color>
 
-    <color name="tabLayout_background_color">#ef9a9a</color>
+    <color name="tabLayout_background_color">#263238</color>
     <color name="tabLayout_title_color">#ffffff</color>
     <color name="tabLayout_indicator_color">#ffffff</color>
     <color name="tabLayout_text_color">#dcdcdc</color>
     <color name="tabLayout_selected_text_color">#ffffff</color>
 
-    <color name="navigation_head_background_color">#ef9a9a</color>
+    <color name="navigation_head_background_color">#263238</color>
     <color name="drawer_icon_color">#ffffff</color>
     
-    <color name="item_day_date_color">#000000</color>
+    <color name="item_day_date_color">#ffffff</color>
     <color name="item_welfare_text_color">#e5e7e8</color>
-    <color name="item_category_title_color">#212121</color>
+    <color name="item_category_title_color">#e5e7e8</color>
 
-    <color name="fragment_background_color">#f2f4f7</color>
+    <color name="fragment_background_color">#212b30</color>
 </resources>
