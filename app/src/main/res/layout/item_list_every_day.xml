@@ -60,6 +60,7 @@
                 android:layout_marginBottom="10dp"
                 android:minHeight="150dp"
                 fresco:viewAspectRatio="1.77"
+                fresco:roundedCornerRadius="3dp"
                 />
             <LinearLayout
                 android:id="@+id/ly_category_content"

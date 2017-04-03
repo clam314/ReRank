@@ -14,4 +14,5 @@ public class Config {
 
     public static final String dayUrl = "day/{day}";
 
+    public static final String randomCategoryUrl = "random/data/{category}/{size}";
 }

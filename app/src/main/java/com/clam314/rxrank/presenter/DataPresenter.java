@@ -5,6 +5,7 @@ import com.clam314.rxrank.entity.Item;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 
 /**
@@ -18,4 +19,6 @@ public interface DataPresenter {
     void loadHistoryDay(Observer<List<String>> observer);
 
     void loadDayContents(Observer<CategoryGroup> observer,String day);
+
+    void loadCategoryRandomContents(Observer<List<Item>> observer, String category, int size);
 }

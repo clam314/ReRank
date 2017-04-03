@@ -18,4 +18,6 @@ public interface HttpModelPresenter {
     Observable<List<String>> loadHistoryDays();
 
     Observable<CategoryGroup> loadDay(String day);
+
+    Observable<List<Item>> loadCategoryRandom(String category,int size);
 }

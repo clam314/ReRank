@@ -64,4 +64,12 @@ public class DataPresenterImpl implements DataPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
+
+    @Override
+    public void loadCategoryRandomContents(Observer<List<Item>> observer, String category, int size) {
+        Observable<List<Item>> observable = httpModelPresenter.loadCategoryRandom(category,size);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
 }

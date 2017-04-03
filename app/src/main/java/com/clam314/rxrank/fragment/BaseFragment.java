@@ -33,7 +33,7 @@ public abstract class BaseFragment extends Fragment {
     protected abstract  void initView(View view);
 
     protected void doAfterInitView(View view, @Nullable Bundle savedInstanceState){}
-    protected void refresh(){}
+    public void onRefresh(){}
 
     @Override
     public void onDestroyView() {

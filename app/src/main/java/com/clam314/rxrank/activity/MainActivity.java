@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.clam314.rxrank.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
 

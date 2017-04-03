@@ -24,4 +24,7 @@ public interface Api {
 
     @GET(Config.dayUrl)
     public Observable<HttpBean<CategoryGroup>> getDayData(@Path("day") String day);
+
+    @GET(Config.randomCategoryUrl)
+    public Observable<HttpBean<List<Item>>> getRandomCategoryData(@Path("category")String category,@Path("size")int size);
 }

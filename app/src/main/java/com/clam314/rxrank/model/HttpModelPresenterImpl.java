@@ -35,4 +35,9 @@ public class HttpModelPresenterImpl implements HttpModelPresenter{
     public Observable<CategoryGroup> loadDay(String day) {
         return HttpUtil.filterStatus(mDataService.getDayData(day));
     }
+
+    @Override
+    public Observable<List<Item>> loadCategoryRandom(String category, int size) {
+        return HttpUtil.filterStatus(mDataService.getRandomCategoryData(category,size));
+    }
 }

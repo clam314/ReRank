@@ -195,6 +195,10 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 tv.setTextSize(22f);
                 tv.getPaint().setFakeBoldText(true);
                 tv.setTextColor(Color.BLACK);
+                Drawable drawable = context.getResources().getDrawable(R.drawable.vector_icon_label);
+                drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+                tv.setCompoundDrawables(drawable,null,null,null);
+                tv.setCompoundDrawablePadding(ViewUtil.dp2px(context,5f));
                 map.put(c,tv);
             }
             return map;
@@ -207,7 +211,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 for(int i = 0; i < eachCategoryMaxItem; i++){
                     TextView tv = new TextView(context);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    lp.setMargins(0,ViewUtil.dp2px(context,2f),0,ViewUtil.dp2px(context,2f));
+                    lp.setMargins(ViewUtil.dp2px(context,8f),ViewUtil.dp2px(context,2f),0,ViewUtil.dp2px(context,2f));
                     tv.setLayoutParams(lp);
                     tv.setText("Content");
                     tv.setTextSize(16f);

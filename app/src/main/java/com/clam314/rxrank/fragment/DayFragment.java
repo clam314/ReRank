@@ -103,7 +103,14 @@ public class DayFragment extends BaseFragment {
         outState.putInt(SAVE_DAY_POSITION,dayPosition);
     }
 
-    private void loadOneDayData(int position){
+
+    @Override
+    public void onRefresh() {
+        dayPosition = -1;
+        loadHistoryDay();
+    }
+
+    private void loadOneDayData(final int position){
         if(historyDays == null ||position < 0|| historyDays.size() <= position){
             return;
         }
@@ -117,11 +124,13 @@ public class DayFragment extends BaseFragment {
 
             @Override
             public void onNext(CategoryGroup categoryGroup) {
-
                 if(categoryGroup == null){
                     DeBugLog.logError(TAG,"loadOneDayData"+"onNext "+" showLoadComplete");
                     moreWrapperAdapter.showLoadComplete();
                 }else {
+                    if(position == 0){
+                        dataList.clear();
+                    }
                     categoryGroup.setDay(day);
                     dataList.add(categoryGroup);
                     moreWrapperAdapter.disableLoadMore();

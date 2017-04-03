@@ -25,8 +25,6 @@ import butterknife.ButterKnife;
 
 public class HomeFragment extends BaseFragment {
 
-    private OnFragmentInteractionListener mListener;
-
     @BindView(R.id.vp_home) ViewPager viewPager;
     TabLayout tabLayout;
 
@@ -60,7 +58,7 @@ public class HomeFragment extends BaseFragment {
                     fragments.add(DayFragment.newInstance());
                     break;
                 case "妹子图":
-                    fragments.add(WelfareFragment.newInstance(Category.welfare));
+                    fragments.add(WelfareFragment.newInstance(Category.welfare,false));
                     break;
                 default:
                     fragments.add(CategoryFragment.newInstance(s));
@@ -80,23 +78,10 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-//            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
+    public void onRefresh() {
+        int position = viewPager.getCurrentItem();
+        if(fragments!= null && position < fragments.size()){
+            fragments.get(position).onRefresh();
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

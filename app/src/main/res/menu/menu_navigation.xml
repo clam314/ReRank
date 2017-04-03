@@ -7,18 +7,17 @@
 
         <item
             android:checked="true"
-            android:id="@+id/homepage"
+            android:id="@+id/menu_home"
             android:icon="@mipmap/ic_format_list_bulleted_blue_700_24dp"
             android:title="首页"/>
 
         <item
-            android:id="@+id/collection"
+            android:id="@+id/menu_collection"
             android:icon="@mipmap/ic_turned_in_amber_a700_24dp"
             android:title="收藏"/>
 
         <item
-
-            android:id="@+id/been"
+            android:id="@+id/menu_welfare"
             android:icon="@mipmap/ic_explore_light_green_a200_24dp"
             android:title="随机图"/>
     </group>
@@ -26,11 +25,11 @@
         android:id="@+id/group2"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/settings"
+            android:id="@+id/menu_settings"
             android:icon="@mipmap/ic_settings_brown_600_24dp"
             android:title="设置"/>
         <item
-            android:id="@+id/help"
+            android:id="@+id/menu_help"
             android:icon="@mipmap/ic_info_outline_cyan_a200_24dp"
             android:title="关于"/>
     </group>

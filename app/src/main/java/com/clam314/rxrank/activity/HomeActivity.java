@@ -3,28 +3,51 @@ package com.clam314.rxrank.activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.clam314.rxrank.R;
+import com.clam314.rxrank.fragment.BaseFragment;
 import com.clam314.rxrank.fragment.HomeFragment;
+import com.clam314.rxrank.fragment.WelfareFragment;
+import com.clam314.rxrank.http.Category;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
     @BindView(R.id.tb_home) Toolbar tbHome;
     @BindView(R.id.dl_home) DrawerLayout dlHome;
     @BindView(R.id.nv_home) NavigationView nvHome;
+    @BindView(R.id.tabs_home) TabLayout tabHome;
 
+    private static final int[] MENU_ID = new int[]{
+            R.id.menu_home,
+            R.id.menu_collection,
+            R.id.menu_welfare,
+            R.id.menu_settings,
+            R.id.menu_help
+    };
+
+    private SparseArray<BaseFragment> drawerFragments;
 
     private FragmentManager fragmentManager;
+    private int currentFragmentId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +56,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
         fragmentManager = getSupportFragmentManager();
         initView();
+        initFragments();
     }
+
+    private void initFragments(){
+        drawerFragments = new SparseArray<>();
+        drawerFragments.put(MENU_ID[0], HomeFragment.newInstance());
+        drawerFragments.put(MENU_ID[1],null);
+        drawerFragments.put(MENU_ID[2], WelfareFragment.newInstance(Category.welfare,true));
+        drawerFragments.put(MENU_ID[3],null);
+        drawerFragments.put(MENU_ID[4],null);
+
+        currentFragmentId = MENU_ID[0];
+        fragmentManager.beginTransaction().replace(R.id.fragment_main, drawerFragments.get(currentFragmentId)).commit();
+    }
+
 
     private void initView(){
         setSupportActionBar(tbHome);
-
         dlHome.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, dlHome, R.string.drawer_open, R.string.drawer_close);
         mDrawerToggle.syncState();
@@ -45,7 +81,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         nvHome.setNavigationItemSelectedListener(this);
         //清除小图标的颜色渲染，显示图标本身的颜色
         nvHome.setItemIconTintList(null);
-        fragmentManager.beginTransaction().replace(R.id.fragment_main, HomeFragment.newInstance()).commit();
     }
 
     @Override
@@ -59,6 +94,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case android.R.id.home:
                 dlHome.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.refresh:
+                if(drawerFragments.get(currentFragmentId) != null){
+                    drawerFragments.get(currentFragmentId).onRefresh();
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -76,22 +116,34 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        //TODO 其他页面暂时没实现
+        if(null == drawerFragments.get(item.getItemId())){
+            Toast.makeText(this,"即将到来……",Toast.LENGTH_SHORT).show();
+            dlHome.closeDrawers();
+            item.setCheckable(false);
+            return true;
+        }
+
         item.setChecked(true);
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        switch (item.getItemId()) {
-            case R.id.homepage:
-
-
-                break;
-            case R.id.been:
-//                BeenFragment beenFragment = new BeenFragment("福利");
-//                MainFragment mainFragment1 = (MainFragment)fragmentManager.findFragmentById(R.id.fragment_main);
-//                transaction.replace(R.id.fragment_main, beenFragment);
-//                transaction.commit();
-                break;
+        if(item.getItemId() != currentFragmentId){
+            if(currentFragmentId == MENU_ID[0]){
+                tabHome.setVisibility(View.GONE);
+            }else if(item.getItemId() == MENU_ID[0]){
+                tabHome.setVisibility(View.VISIBLE);
+            }
+            changeContentFragment(drawerFragments.get(currentFragmentId),drawerFragments.get(item.getItemId()));
+            currentFragmentId = item.getItemId();
         }
         dlHome.closeDrawers();
         return true;
+    }
+
+    private void changeContentFragment(BaseFragment from, BaseFragment to){
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if(!to.isAdded()){
+            transaction.hide(from).add(R.id.fragment_main,to).commit();
+        }else {
+            transaction.hide(from).show(to).commit();
+        }
     }
 }

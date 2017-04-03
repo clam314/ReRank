@@ -44,8 +44,6 @@ public class CategoryFragment extends BaseFragment {
 
     protected LoadMoreWrapperAdapter moreAdapter;
 
-    protected OnFragmentInteractionListener mListener;
-
     public CategoryFragment() {
     }
 
@@ -128,6 +126,9 @@ public class CategoryFragment extends BaseFragment {
                     moreAdapter.showLoadComplete();
                     DeBugLog.logDebug(TAG,mCategory+" load data showLoadComplete() page:"+ pageNo);
                 }else {
+                    if(page == 1){
+                        mItems.clear();
+                    }
                     mItems.addAll(items);
                     moreAdapter.disableLoadMore();
                     DeBugLog.logDebug(TAG,mCategory+" load data disableLoadMore() page:"+ pageNo);
@@ -150,6 +151,12 @@ public class CategoryFragment extends BaseFragment {
     }
 
     @Override
+    public void onRefresh() {
+        pageNo = 1;
+        loadData(pageNo);
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(SAVE_ITEM_LIST,mItems);
@@ -161,17 +168,11 @@ public class CategoryFragment extends BaseFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         DeBugLog.logWarning(TAG,mCategory+" onAttach");
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-//            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
         DeBugLog.logWarning(TAG,mCategory+" onDetach");
     }
 
@@ -187,7 +188,4 @@ public class CategoryFragment extends BaseFragment {
         DeBugLog.logWarning(TAG,mCategory+" onDestroy");
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 }
