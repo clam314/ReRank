@@ -15,9 +15,11 @@ import com.clam314.rxrank.adapter.LoadMoreWrapperAdapter;
 import com.clam314.rxrank.adapter.WelfareAdapter;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.presenter.DataPresenter;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
+import butterknife.BindView;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -28,6 +30,8 @@ public class WelfareFragment extends CategoryFragment {
     private boolean isRandom = false;
     private boolean refreshing = false;
 
+    @BindView(R.id.expanded_image) SimpleDraweeView svAnimation;
+    @BindView(R.id.fl_content)View rootContent;
     public WelfareFragment() {
     }
 
@@ -56,7 +60,7 @@ public class WelfareFragment extends CategoryFragment {
 
     @Override
     protected void initView(View view) {
-        moreAdapter =  new LoadMoreWrapperAdapter(new WelfareAdapter(mItems,this));
+        moreAdapter =  new LoadMoreWrapperAdapter(new WelfareAdapter(mItems,svAnimation,rootContent));
         moreAdapter.setLoadStatusViewHolder(LoadMoreViewHolder.newInstance(getContext()),null,null);
         moreAdapter.setOnLoadListener(new LoadMoreWrapperAdapter.OnLoadListener() {
             @Override

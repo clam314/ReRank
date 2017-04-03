@@ -73,6 +73,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     private void initView(){
+        tbHome.setTitle("首页");
         setSupportActionBar(tbHome);
         dlHome.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, dlHome, R.string.drawer_open, R.string.drawer_close);
@@ -126,6 +127,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         item.setChecked(true);
         if(item.getItemId() != currentFragmentId){
+            tbHome.setTitle(item.getTitle());
             if(currentFragmentId == MENU_ID[0]){
                 tabHome.setVisibility(View.GONE);
             }else if(item.getItemId() == MENU_ID[0]){
