@@ -31,20 +31,20 @@ import io.reactivex.disposables.Disposable;
 
 
 public class CategoryFragment extends BaseFragment {
-    private static final String TAG = CategoryFragment.class.getSimpleName();
-    private static final String ARG_PARAM1 = "param1";
-    private static final String SAVE_ITEM_LIST = "mItems";
-    private static final String SAVE_PAGE_NO = "pageNo";
-    private String mCategory;
-    private ArrayList<Item> mItems;
-    private int pageNo = 1;
+    protected static final String TAG = CategoryFragment.class.getSimpleName();
+    protected static final String ARG_PARAM1 = "param1";
+    protected static final String SAVE_ITEM_LIST = "mItems";
+    protected static final String SAVE_PAGE_NO = "pageNo";
+    protected String mCategory;
+    protected ArrayList<Item> mItems;
+    protected int pageNo = 1;
 
     @BindView(R.id.rv_category)
     RecyclerView recyclerView;
 
-    private LoadMoreWrapperAdapter moreAdapter;
+    protected LoadMoreWrapperAdapter moreAdapter;
 
-    private OnFragmentInteractionListener mListener;
+    protected OnFragmentInteractionListener mListener;
 
     public CategoryFragment() {
     }
@@ -113,7 +113,7 @@ public class CategoryFragment extends BaseFragment {
         }
     }
 
-    private void loadData(final int page){
+    protected void loadData(final int page){
         DeBugLog.logDebug(TAG,mCategory+" loadData page:"+ pageNo);
         MainApplication.getInstance().getPresenter(DataPresenter.class).loadCategoryContents(new Observer<List<Item>>() {
             @Override

@@ -39,7 +39,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
+}
 
     @Override
     public void onDetach() {

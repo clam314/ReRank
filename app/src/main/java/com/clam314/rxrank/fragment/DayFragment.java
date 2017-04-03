@@ -108,6 +108,7 @@ public class DayFragment extends BaseFragment {
             return;
         }
         final String day = historyDays.get(position);
+        DeBugLog.logError(TAG,"loadOneDayData"+" day:"+day);
         MainApplication.getInstance().getPresenter(DataPresenter.class).loadDayContents(new Observer<CategoryGroup>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -116,12 +117,15 @@ public class DayFragment extends BaseFragment {
 
             @Override
             public void onNext(CategoryGroup categoryGroup) {
+
                 if(categoryGroup == null){
+                    DeBugLog.logError(TAG,"loadOneDayData"+"onNext "+" showLoadComplete");
                     moreWrapperAdapter.showLoadComplete();
                 }else {
                     categoryGroup.setDay(day);
                     dataList.add(categoryGroup);
                     moreWrapperAdapter.disableLoadMore();
+                    DeBugLog.logError(TAG,"loadOneDayData"+"onNext"+" disableLoadMore"+ " -dataList:size:"+dataList.size()+" -day:"+day);
                 }
             }
 
@@ -129,6 +133,7 @@ public class DayFragment extends BaseFragment {
             public void onError(Throwable e) {
                 dayPosition--;
                 moreWrapperAdapter.showLoadError();
+                DeBugLog.logError(TAG,e.getMessage());
             }
 
             @Override
@@ -156,7 +161,7 @@ public class DayFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable e) {
-                DeBugLog.logError(TAG,e.getMessage());
+                e.printStackTrace();
             }
 
             @Override

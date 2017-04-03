@@ -52,12 +52,19 @@ public class HomeFragment extends BaseFragment {
         titles.add(Category.resource);
         titles.add(Category.app);
         titles.add(Category.recommend);
+        titles.add("妹子图");
         fragments = new ArrayList<>();
         for(String s : titles){
-            if(s.equals("每日合集")){
-                fragments.add(DayFragment.newInstance());
-            }else {
-                fragments.add(CategoryFragment.newInstance(s));
+            switch (s) {
+                case "每日合集":
+                    fragments.add(DayFragment.newInstance());
+                    break;
+                case "妹子图":
+                    fragments.add(WelfareFragment.newInstance(Category.welfare));
+                    break;
+                default:
+                    fragments.add(CategoryFragment.newInstance(s));
+                    break;
             }
         }
         TabAdapter tabAdapter = new TabAdapter(titles,fragments,getChildFragmentManager());

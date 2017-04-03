@@ -2,6 +2,7 @@ package com.clam314.rxrank.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.http.Category;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.clam314.rxrank.util.StringUtil;
+import com.clam314.rxrank.util.ViewUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
@@ -39,7 +41,6 @@ import io.reactivex.functions.Function;
 
 public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = DayAdapter.class.getSimpleName();
-    private Holder holder;
     private List<CategoryGroup> groups;
 
     public DayAdapter(List<CategoryGroup> groups) {
@@ -53,10 +54,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(holder == null){
-            holder = new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_every_day,parent,false));
-        }
-        return holder;
+        return new Holder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_every_day,parent,false));
     }
 
     @Override
@@ -68,7 +66,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void setData(final Holder holder, final CategoryGroup group){
         if(group == null) return;
-        holder.tvDay.setText(StringUtil.getStringAfterPosition(group.getDay(),4));
+        holder.tvDay.setText(StringUtil.getStringAfterPosition(group.getDay(),5));
         if(group.getWelfare() != null
                 && group.getWelfare().size() != 0
                 && !TextUtils.isEmpty(group.getWelfare().get(0).getUrl())){
@@ -140,9 +138,9 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class Holder extends RecyclerView.ViewHolder{
         private static final int eachCategoryMaxItem = 5;
-        @BindView(R.id.iv_welfare) SimpleDraweeView ivWelfare;
-        @BindView(R.id.tv_day) TextView tvDay;
-        @BindView(R.id.ly_category_content) LinearLayout lyContent;
+        SimpleDraweeView ivWelfare;
+        TextView tvDay;
+        LinearLayout lyContent;
         Map<String,LinearLayout> mapCategoryLy;
         Map<String,TextView> mapCategoryTvTitle;
         Map<String,List<TextView>> mapCategoryTvContent;
@@ -150,7 +148,9 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         Holder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ivWelfare = (SimpleDraweeView)itemView.findViewById(R.id.iv_welfare);
+            tvDay = (TextView)itemView.findViewById(R.id.tv_day);
+            lyContent = (LinearLayout)itemView.findViewById(R.id.ly_category_content);
             Context context = itemView.getContext();
             String[] categories = Category.getCategoryListBeside(Category.all,Category.welfare);
             mapCategoryLy = createCategoryLinearLayoutMap(context, categories);
@@ -189,9 +189,12 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             for(String c : categories){
                 TextView tv = new TextView(context);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(0,ViewUtil.dp2px(context,10f),0,0);
                 tv.setLayoutParams(lp);
                 tv.setText("Title");
-                tv.setTextColor(Color.BLUE);
+                tv.setTextSize(22f);
+                tv.getPaint().setFakeBoldText(true);
+                tv.setTextColor(Color.BLACK);
                 map.put(c,tv);
             }
             return map;
@@ -204,9 +207,15 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 for(int i = 0; i < eachCategoryMaxItem; i++){
                     TextView tv = new TextView(context);
                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lp.setMargins(0,ViewUtil.dp2px(context,2f),0,ViewUtil.dp2px(context,2f));
                     tv.setLayoutParams(lp);
                     tv.setText("Content");
-                    tv.setTextColor(Color.CYAN);
+                    tv.setTextSize(16f);
+                    tv.setTextColor(Color.GRAY);
+                    Drawable drawable = context.getResources().getDrawable(R.drawable.shape_little_circle);
+                    drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
+                    tv.setCompoundDrawables(drawable,null,null,null);
+                    tv.setCompoundDrawablePadding(ViewUtil.dp2px(context,3f));
                     list.add(tv);
                 }
                 map.put(c,list);
@@ -220,9 +229,11 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 List<SimpleDraweeView> list = new ArrayList<>();
                 for(int i = 0; i < eachCategoryMaxItem; i++){
                     SimpleDraweeView sv = new SimpleDraweeView(context);
-                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewUtil.dp2px(context,200f), ViewGroup.LayoutParams.WRAP_CONTENT);
+                    int px = ViewUtil.dp2px(context,5f);
+                    lp.setMargins(px,px,px,px);
                     sv.setLayoutParams(lp);
-                    sv.setAspectRatio(1.77f);
+                    sv.setAspectRatio(1.33f);
                     list.add(sv);
                 }
                 map.put(c,list);
