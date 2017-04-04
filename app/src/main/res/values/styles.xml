@@ -44,4 +44,12 @@
         <!-- navigation icon 的颜色-->
         <item name="color">@color/drawer_icon_color</item>
     </style>
+
+    <style name="MyProgressBarStyle">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/progress_bar_web</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:minHeight">3dp</item>
+        <item name="android:maxHeight">10dp</item>
+    </style>
 </resources>

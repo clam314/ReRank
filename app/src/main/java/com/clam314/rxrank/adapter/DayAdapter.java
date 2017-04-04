@@ -1,6 +1,7 @@
 package com.clam314.rxrank.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.entity.CategoryGroup;
@@ -116,9 +118,10 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             TextView tv = tvContents.get(i);
             SimpleDraweeView iv = ivContents.get(i);
             if(items != null && items.size() > i){
-                Item item = items.get(i);
+                final Item item = items.get(i);
                 tv.setVisibility(View.VISIBLE);
                 tv.setText(String.format(Locale.CANADA,"%s\n(%s)", StringUtil.getShowStringNotNull(item.getDesc()),StringUtil.getShowStringNotNull(item.getWho())));
+                ViewUtil.setClickListenerOpenItem(tv,item);
                 if(item.getImages() == null
                         || item.getImages().size() == 0
                         || TextUtils.isEmpty(item.getImages().get(0))){

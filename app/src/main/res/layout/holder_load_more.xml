@@ -14,5 +14,5 @@
         android:src="@drawable/vector_icon_refresh"
         android:padding="5dp"
         android:scaleType="fitCenter"
-        android:tint="@color/colorPrimary"/>
+        android:tint="@color/load_refresh_circle_color"/>
 </LinearLayout>

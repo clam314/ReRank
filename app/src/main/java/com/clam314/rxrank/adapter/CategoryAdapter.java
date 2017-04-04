@@ -1,6 +1,7 @@
 package com.clam314.rxrank.adapter;
 
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.clam314.rxrank.R;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.clam314.rxrank.util.StringUtil;
+import com.clam314.rxrank.util.ViewUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -63,17 +65,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(item.getImages() != null && item.getImages().size() > 0){
             String url = item.getImages().get(0);
             holder.draweeView.setVisibility(View.VISIBLE);
-//            holder.draweeView.setImageURI(url);
             FrescoUtil.loadImage(Uri.parse(url), holder.draweeView, null, 0, 0, null);
         }else {
             holder.draweeView.setVisibility(View.GONE);
         }
-        holder.tvDescribe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        ViewUtil.setClickListenerOpenItem(holder.cardView,item);
 
-            }
-        });
     }
 
     @Override
@@ -88,6 +85,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @BindView(R.id.tv_avatar) TextView tvAvatar;
         @BindView(R.id.tv_share) TextView tvShare;
         @BindView(R.id.iv_image) SimpleDraweeView draweeView;
+        @BindView(R.id.card_category) CardView cardView;
 
         ItemHolder(View itemView) {
             super(itemView);

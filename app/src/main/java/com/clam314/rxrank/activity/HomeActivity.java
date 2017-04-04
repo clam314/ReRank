@@ -62,12 +62,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         fragmentManager = getSupportFragmentManager();
         initView();
         initFragments();
-        if(Build.VERSION.SDK_INT >= 21){
-            int statusBarHeight = ViewUtil.getStatusBarHeight(this);
-//            DrawerLayout.LayoutParams lp = new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//            lp.setMargins(0,statusBarHeight,0,0);
-            clHome.setPadding(0,statusBarHeight,0,0);
-        }
+        ViewUtil.statusBarCompat(this,clHome);
     }
 
     private void initFragments(){
