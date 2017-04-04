@@ -1,7 +1,9 @@
 package com.clam314.rxrank.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +18,7 @@ import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.clam314.rxrank.R;
@@ -23,6 +26,7 @@ import com.clam314.rxrank.fragment.BaseFragment;
 import com.clam314.rxrank.fragment.HomeFragment;
 import com.clam314.rxrank.fragment.WelfareFragment;
 import com.clam314.rxrank.http.Category;
+import com.clam314.rxrank.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.dl_home) DrawerLayout dlHome;
     @BindView(R.id.nv_home) NavigationView nvHome;
     @BindView(R.id.tabs_home) TabLayout tabHome;
+    @BindView(R.id.cl_home) CoordinatorLayout clHome;
 
     private static final int[] MENU_ID = new int[]{
             R.id.menu_home,
@@ -57,6 +62,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         fragmentManager = getSupportFragmentManager();
         initView();
         initFragments();
+        if(Build.VERSION.SDK_INT >= 21){
+            int statusBarHeight = ViewUtil.getStatusBarHeight(this);
+//            DrawerLayout.LayoutParams lp = new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            lp.setMargins(0,statusBarHeight,0,0);
+            clHome.setPadding(0,statusBarHeight,0,0);
+        }
     }
 
     private void initFragments(){

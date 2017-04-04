@@ -1,5 +1,6 @@
 package com.clam314.rxrank.util;
 
+import android.app.Activity;
 import android.content.Context;
 
 /**
@@ -25,6 +26,15 @@ public class ViewUtil {
     public static int sp2px(Context context, float spValue) {
         float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
+    }
+
+    public static int getStatusBarHeight(Activity activity) {
+        int result = 0;
+        int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = activity.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
 }
