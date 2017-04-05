@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.entity.Item;
-import com.clam314.rxrank.fragment.BaseFragment;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -70,12 +69,13 @@ public class WelfareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         if(imageUri == null){
-            holder.draweeView.setOnClickListener(null);
+            holder.draweeView.setOnLongClickListener(null);
         }else {
-            holder.draweeView.setOnClickListener(new View.OnClickListener() {
+            holder.draweeView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
-                    zoomImageFromThumb(holder.draweeView,Uri.parse(item.getUrl()));
+                public boolean onLongClick(View v) {
+                    zoomImageFromThumb(v,Uri.parse(item.getUrl()));
+                    return true;
                 }
             });
         }

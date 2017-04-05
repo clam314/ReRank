@@ -10,6 +10,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="preferenceTheme">@style/Theme.WtfPreference</item>
+
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
@@ -34,6 +36,19 @@
         <item name="drawerArrowStyle">@style/MyDrawerStyle</item>
     </style>
 
+    <style name="Theme.WtfPreference" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceScreenStyle">@style/Preference.PreferenceScreen</item>
+        <item name="preferenceFragmentStyle">@style/PreferenceFragment</item>
+        <item name="preferenceCategoryStyle">@style/Preference.Category</item>
+        <item name="preferenceStyle">@style/Preference</item>
+        <item name="preferenceInformationStyle">@style/Preference.Information</item>
+        <item name="checkBoxPreferenceStyle">@style/Preference.CheckBoxPreference</item>
+        <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
+        <item name="dialogPreferenceStyle">@style/Preference.DialogPreference</item>
+        <item name="editTextPreferenceStyle">@style/Preference.DialogPreference.EditTextPreference</item>
+        <item name="preferenceFragmentListStyle">@style/PreferenceFragmentList</item>
+        <item name="android:background">@color/preference_setting_background_color</item>
+    </style>
 
     <style name="TabLayout_Text_Appearance" parent="TextAppearance.Design.Tab">
         <!--禁止自动大写 -->

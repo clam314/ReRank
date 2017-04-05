@@ -7,4 +7,32 @@
     <string name="drawer_close">drawer close</string>
     <string name="title_activity_base">BaseActivity</string>
 
+
+
+
+
+    <!--设置页面-->
+    <string name="setting_group_normal">一般设置</string>
+    <string name="setting_show_mode">显示模式</string>
+    <string name="setting_show_mode_key">show_mode</string>
+    <string name="setting_night_no">日间模式</string>
+    <string name="setting_night_yes">夜间模式</string>
+    <string name="setting_night_auto">自动切换</string>
+    <string-array name="show_mode_key">
+        <item>@string/setting_night_no</item>
+        <item>@string/setting_night_yes</item>
+        <item>@string/setting_night_auto</item>
+    </string-array>
+    <string-array name="show_mode_value">
+        <item>@string/setting_night_no</item>
+        <item>@string/setting_night_yes</item>
+        <item>@string/setting_night_auto</item>
+    </string-array>
+    <string name="read_mode">打开方式</string>
+    <string name="read_mode_key">read_mode_key</string>
+    <string name="read_mode_summary_on">使用默认浏览器打开页面</string>
+    <string name="read_mode_summary_off">使用内置浏览器打开页面</string>
+
+    <string name="setting_group_about">关于</string>
+
 </resources>

@@ -1,40 +1,37 @@
 package com.clam314.rxrank.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.fragment.BaseFragment;
 import com.clam314.rxrank.fragment.HomeFragment;
+import com.clam314.rxrank.fragment.SettingFragment;
 import com.clam314.rxrank.fragment.WelfareFragment;
 import com.clam314.rxrank.http.Category;
+import com.clam314.rxrank.util.DeBugLog;
 import com.clam314.rxrank.util.ViewUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+    private static final String SAVE_CURRENT_ID = "current_id";
     @BindView(R.id.tb_home) Toolbar tbHome;
     @BindView(R.id.dl_home) DrawerLayout dlHome;
     @BindView(R.id.nv_home) NavigationView nvHome;
@@ -49,10 +46,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             R.id.menu_help
     };
 
-    private SparseArray<BaseFragment> drawerFragments;
+    private SparseArray<Fragment> drawerFragments;
 
     private FragmentManager fragmentManager;
-    private int currentFragmentId = 0;
+    private int currentFragmentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,20 +57,30 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         fragmentManager = getSupportFragmentManager();
+        currentFragmentId = 0;
         initView();
-        initFragments();
+        initFragments(savedInstanceState);
         ViewUtil.statusBarCompat(this,clHome);
+        DeBugLog.logError("home","onCreate");
     }
 
-    private void initFragments(){
-        drawerFragments = new SparseArray<>();
-        drawerFragments.put(MENU_ID[0], HomeFragment.newInstance());
-        drawerFragments.put(MENU_ID[1],null);
-        drawerFragments.put(MENU_ID[2], WelfareFragment.newInstance(Category.welfare,true));
-        drawerFragments.put(MENU_ID[3],null);
-        drawerFragments.put(MENU_ID[4],null);
+    private void initFragments(Bundle savedInstanceState){
+        if(drawerFragments == null){
+            drawerFragments = new SparseArray<>();
+            drawerFragments.put(MENU_ID[0], HomeFragment.newInstance());
+            drawerFragments.put(MENU_ID[1],null);
+            drawerFragments.put(MENU_ID[2], WelfareFragment.newInstance(Category.welfare,true));
+            drawerFragments.put(MENU_ID[3], SettingFragment.newInstance());
+            drawerFragments.put(MENU_ID[4],null);
+        }
 
-        currentFragmentId = MENU_ID[0];
+        if(savedInstanceState == null){
+            currentFragmentId = MENU_ID[0];
+        }else {
+            int id = savedInstanceState.getInt(SAVE_CURRENT_ID,MENU_ID[0]);
+            changeTabLayoutStatus("设置",id);
+            currentFragmentId = id;
+        }
         fragmentManager.beginTransaction().replace(R.id.fragment_main, drawerFragments.get(currentFragmentId)).commit();
     }
 
@@ -91,8 +98,28 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVE_CURRENT_ID,currentFragmentId);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DeBugLog.logError("home","onStart");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        DeBugLog.logError("home","onRestoreInstanceState");
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar,menu);
+        changeRefreshIconVisibility(currentFragmentId);
+        DeBugLog.logError("home","onCreateOptionsMenu");
         return true;
     }
 
@@ -103,8 +130,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 dlHome.openDrawer(GravityCompat.START);
                 return true;
             case R.id.refresh:
-                if(drawerFragments.get(currentFragmentId) != null){
-                    drawerFragments.get(currentFragmentId).onRefresh();
+                if(drawerFragments.get(currentFragmentId) instanceof BaseFragment){
+                    ((BaseFragment)drawerFragments.get(currentFragmentId)).onRefresh();
                 }
                 return true;
         }
@@ -133,12 +160,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         item.setChecked(true);
         if(item.getItemId() != currentFragmentId){
-            tbHome.setTitle(item.getTitle());
-            if(currentFragmentId == MENU_ID[0]){
-                tabHome.setVisibility(View.GONE);
-            }else if(item.getItemId() == MENU_ID[0]){
-                tabHome.setVisibility(View.VISIBLE);
-            }
+            changeTabLayoutStatus(item.getTitle(),item.getItemId());
+            changeRefreshIconVisibility(item.getItemId());
             changeContentFragment(drawerFragments.get(currentFragmentId),drawerFragments.get(item.getItemId()));
             currentFragmentId = item.getItemId();
         }
@@ -146,7 +169,22 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    private void changeContentFragment(BaseFragment from, BaseFragment to){
+    private void changeTabLayoutStatus(CharSequence title, int itemId){
+        tbHome.setTitle(title);
+        if(currentFragmentId == MENU_ID[0]){
+            tabHome.setVisibility(View.GONE);
+        }else if(itemId == MENU_ID[0]){
+            tabHome.setVisibility(View.VISIBLE);
+        }else {
+            tabHome.setVisibility(View.GONE);
+        }
+    }
+
+    private void changeRefreshIconVisibility(int itemId){
+        tbHome.getMenu().findItem(R.id.refresh).setVisible(itemId != MENU_ID[3]);
+    }
+
+    private void changeContentFragment(Fragment from, Fragment to){
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         if(!to.isAdded()){
             transaction.hide(from).add(R.id.fragment_main,to).commit();

@@ -27,5 +27,4 @@
 
     <attr name="navigation_background_color" format="color"/>
     <attr name="navigation_item_text_color" format="color"/>
-
 </resources>

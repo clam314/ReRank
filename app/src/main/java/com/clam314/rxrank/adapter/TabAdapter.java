@@ -10,9 +10,9 @@ import com.clam314.rxrank.fragment.BaseFragment;
 import java.util.List;
 
 /**
- * Created by clam314 on 2016/3/1.
+ * Created by clam314 on 2016/3/1
  */
-public class TabAdapter extends FragmentStatePagerAdapter{
+public class TabAdapter extends FragmentStatePagerAdapter {
 
     private List<BaseFragment> list;
     private List<String> tabTitles;

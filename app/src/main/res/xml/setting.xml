@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/setting_group_normal">
+        <ListPreference
+            android:title="@string/setting_show_mode"
+            android:key="@string/setting_show_mode_key"
+            android:entries="@array/show_mode_key"
+            android:entryValues="@array/show_mode_value"
+            android:summary="@string/setting_night_no"
+            />
+        <CheckBoxPreference
+            android:title="@string/read_mode"
+            android:key="@string/read_mode_key"
+            android:summaryOn="@string/read_mode_summary_on"
+            android:summaryOff="@string/read_mode_summary_off"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/setting_group_about">
+        <Preference
+            android:title="作者"
+            android:key="author"
+            android:summary=" "
+            />
+        <Preference
+            android:title="源代码地址"
+            android:key="resource_code"
+            android:summary=" "
+            />
+        <Preference
+            android:title="版本"
+            android:key="version"
+            android:summary="v1.0"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatDelegate;
 
 import com.clam314.rxrank.presenter.DataPresenter;
 import com.clam314.rxrank.presenter.DataPresenterImpl;
+import com.clam314.rxrank.util.ConfigUtil;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.internal.Supplier;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -23,7 +24,6 @@ import java.util.Map;
 public class MainApplication extends Application {
 
     static {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
@@ -41,6 +41,11 @@ public class MainApplication extends Application {
         application = this;
         initPresenter();
         initFresco(this,200);
+        initTheme();
+    }
+
+    private void initTheme(){
+        ConfigUtil.initConfig(this);
     }
 
     private void initPresenter(){

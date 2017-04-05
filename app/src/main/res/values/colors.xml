@@ -43,4 +43,6 @@
     <color name="progress_color">#726edf</color>
 
     <color name="load_refresh_circle_color">#ef9a9a</color>
+
+    <color name="preference_setting_background_color">#f2f4f7</color>
 </resources>

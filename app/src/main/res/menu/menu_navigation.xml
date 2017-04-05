@@ -15,6 +15,7 @@
         <item
             android:id="@+id/menu_collection"
             android:icon="@mipmap/ic_turned_in_amber_a700_24dp"
+            android:visible="false"
             android:title="收藏"/>
 
         <item
@@ -32,6 +33,7 @@
         <item
             android:id="@+id/menu_help"
             android:icon="@mipmap/ic_info_outline_cyan_a200_24dp"
+            android:visible="false"
             android:title="关于"/>
     </group>
 </menu>

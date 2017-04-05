@@ -63,7 +63,7 @@ public class ViewUtil {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    if(Category.video.equals(item.getType())){
+                    if(Category.video.equals(item.getType())||ConfigUtil.isOpenPageBySystem()){
                         intent.setAction("android.intent.action.VIEW");
                         Uri content_url = Uri.parse(item.getUrl());
                         intent.setData(content_url);
