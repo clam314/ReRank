@@ -2,6 +2,7 @@ package com.clam314.rxrank.presenter;
 
 import com.clam314.rxrank.entity.CategoryGroup;
 import com.clam314.rxrank.entity.Item;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface DataPresenter {
     void loadDayContents(Observer<CategoryGroup> observer,String day);
 
     void loadCategoryRandomContents(Observer<List<Item>> observer, String category, int size);
+
+    void loadHomeImage(Observer<List<Item>> observer);
 }

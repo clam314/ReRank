@@ -4,9 +4,11 @@ import android.text.TextUtils;
 
 import com.clam314.rxrank.entity.CategoryGroup;
 import com.clam314.rxrank.entity.Item;
+import com.clam314.rxrank.http.Category;
 import com.clam314.rxrank.model.HttpModelPresenter;
 import com.clam314.rxrank.model.HttpModelPresenterImpl;
 import com.clam314.rxrank.util.StringUtil;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +70,14 @@ public class DataPresenterImpl implements DataPresenter {
     @Override
     public void loadCategoryRandomContents(Observer<List<Item>> observer, String category, int size) {
         Observable<List<Item>> observable = httpModelPresenter.loadCategoryRandom(category,size);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    @Override
+    public void loadHomeImage(Observer<List<Item>> observer) {
+        Observable<List<Item>> observable = httpModelPresenter.loadCategoryRandom(Category.welfare,1);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
