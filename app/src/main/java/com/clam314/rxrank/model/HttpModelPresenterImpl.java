@@ -9,6 +9,7 @@ import com.clam314.rxrank.http.RetrofitUtil;
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 
 /**
  * Created by clam314 on 2017/3/31
@@ -39,5 +40,10 @@ public class HttpModelPresenterImpl implements HttpModelPresenter{
     @Override
     public Observable<List<Item>> loadCategoryRandom(String category, int size) {
         return HttpUtil.filterStatus(mDataService.getRandomCategoryData(category,size));
+    }
+
+    @Override
+    public Observable<ResponseBody> downloadFile(String url) {
+        return mDataService.downlaodFile(url);
     }
 }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.transition.Transition;
 
 import android.transition.TransitionInflater;
@@ -19,6 +20,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.clam314.rxrank.MainApplication;
 import com.clam314.rxrank.R;
+import com.clam314.rxrank.entity.ImageCache;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.presenter.DataPresenter;
 import com.clam314.rxrank.util.DeBugLog;
@@ -50,23 +52,20 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView(){
-        MainApplication.getInstance().getPresenter(DataPresenter.class).loadHomeImage(new Observer<List<Item>>() {
+        MainApplication.getInstance().getPresenter(DataPresenter.class).loadHomeImage(getBaseContext(),new Observer<ImageCache>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(List<Item> items) {
-                if(items != null && items.size() > 0){
-                    FrescoUtil.loadImage(Uri.parse(items.get(0).getUrl()),svImage,null,0,0,null);
-                    startAnimator(svImage);
-                }
+            public void onNext(ImageCache cache) {
+                FrescoUtil.loadImage(Uri.parse(cache.getSavePath()),svImage,null,0,0,null);
             }
 
             @Override
             public void onError(Throwable e) {
-
+                svImage.setImageURI((new Uri.Builder().scheme("res").path(String.valueOf(R.drawable.img_default))).build());
             }
 
             @Override
