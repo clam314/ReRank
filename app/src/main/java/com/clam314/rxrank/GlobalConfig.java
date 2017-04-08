@@ -9,9 +9,10 @@ import android.preference.PreferenceManager;
  */
 
 public class GlobalConfig {
+
     public static final String NAME_PREFERENCE_SP = "MY_PREFERENCE";
 
-    public static void setNightModeTheme(Context context){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-    }
+    public static final String SD_SAVE_FILE_NAME = "clam314_image";
+
+    public static final long TIME_OUT_HOME_IMAGE_CACHE = 1000*60*60;
 }

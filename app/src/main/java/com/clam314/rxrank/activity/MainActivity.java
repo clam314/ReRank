@@ -24,6 +24,7 @@ import com.clam314.rxrank.entity.ImageCache;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.presenter.DataPresenter;
 import com.clam314.rxrank.util.DeBugLog;
+import com.clam314.rxrank.util.FileUtil;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -43,13 +44,14 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         if(Build.VERSION.SDK_INT >= 21){
             getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-            Transition fade = TransitionInflater.from(this).inflateTransition(android.R.transition.slide_bottom);
+            Transition fade = TransitionInflater.from(this).inflateTransition(android.R.transition.slide_top);
             getWindow().setExitTransition(fade);
         }
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
     }
+
 
     private void initView(){
         MainApplication.getInstance().getPresenter(DataPresenter.class).loadHomeImage(getBaseContext(),new Observer<ImageCache>() {
@@ -60,17 +62,22 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onNext(ImageCache cache) {
-                FrescoUtil.loadImage(Uri.parse(cache.getSavePath()),svImage,null,0,0,null);
+                if(!TextUtils.isEmpty(cache.getSavePath())){
+                    FrescoUtil.loadImage(Uri.parse("file://"+ cache.getSavePath()),svImage,null,0,0,null);
+                }else {
+                    svImage.setImageURI((new Uri.Builder().scheme("res").path(String.valueOf(R.drawable.img_default))).build());
+                }
             }
 
             @Override
             public void onError(Throwable e) {
                 svImage.setImageURI((new Uri.Builder().scheme("res").path(String.valueOf(R.drawable.img_default))).build());
+                startAnimator(svImage);
             }
 
             @Override
             public void onComplete() {
-
+                startAnimator(svImage);
             }
         });
     }

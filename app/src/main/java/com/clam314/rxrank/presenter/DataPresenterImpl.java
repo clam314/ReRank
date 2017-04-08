@@ -1,8 +1,8 @@
 package com.clam314.rxrank.presenter;
 
 import android.content.Context;
-import android.text.TextUtils;
 
+import com.clam314.rxrank.GlobalConfig;
 import com.clam314.rxrank.entity.CategoryGroup;
 import com.clam314.rxrank.entity.ImageCache;
 import com.clam314.rxrank.entity.Item;
@@ -11,8 +11,9 @@ import com.clam314.rxrank.model.HttpModelPresenter;
 import com.clam314.rxrank.model.HttpModelPresenterImpl;
 import com.clam314.rxrank.model.PreferenceModePresenter;
 import com.clam314.rxrank.model.PreferenceModePresenterImpl;
+import com.clam314.rxrank.util.DeBugLog;
+import com.clam314.rxrank.util.FileUtil;
 import com.clam314.rxrank.util.StringUtil;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,10 +27,8 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
@@ -90,43 +89,69 @@ public class DataPresenterImpl implements DataPresenter {
     }
 
     @Override
-    public void loadHomeImage(Context context,Observer<ImageCache> observer) {
+    public void loadHomeImage(final Context context,Observer<ImageCache> observer) {
+        DeBugLog.logWarning("imageCache","——loadHomeImage");
         Observable<ImageCache> observable = preferenceModePresenter.getHomeImageCache(context);
         observable.subscribeOn(Schedulers.io())
+                .map(new Function<ImageCache,ImageCache>() {
+                    @Override
+                    public ImageCache apply(@NonNull ImageCache cache) throws Exception {
+                        DeBugLog.logWarning("imageCache","——loadHomeImage -cache: refreshTime:"+cache.getRefreshTime()+" path:"+cache.getSavePath());
+                        if(System.currentTimeMillis()-cache.getRefreshTime() > GlobalConfig.TIME_OUT_HOME_IMAGE_CACHE){
+                            loadHomeImageCache(context, FileUtil.getAppExternalStorageDirectory());
+                        }
+                        return cache;
+                    }
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
 
     @Override
     public void loadHomeImageCache(final Context context,final String savePath) {
+        DeBugLog.logWarning("imageCache","——loadHomeImageCache");
         Observable<List<Item>> observable = httpModelPresenter.loadCategoryRandom(Category.welfare,1);
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .flatMap(new Function<List<Item>, ObservableSource<ResponseBody>>() {
+        observable.subscribeOn(Schedulers.newThread())
+                .flatMap(new Function<List<Item>, ObservableSource<Object[]>>() {
                     @Override
-                    public ObservableSource<ResponseBody> apply(@NonNull List<Item> items) throws Exception {
-                        return httpModelPresenter.downloadFile(items.get(0).getUrl());
+                    public ObservableSource<Object[]> apply(@NonNull List<Item> items) throws Exception {
+                        final String url = items.get(0).getUrl();
+                        return httpModelPresenter.downloadFile(url).map(new Function<ResponseBody, Object[]>() {
+                            @Override
+                            public Object[] apply(@NonNull ResponseBody responseBody) throws Exception {
+                                DeBugLog.logWarning("imageCache","——loadHomeImageCache get responseBody");
+                                return new Object[]{responseBody,FileUtil.getFileSuffix(url)};
+                            }
+                        });
                     }
                 })
-                .subscribe(new Consumer<ResponseBody>() {
+                .subscribe(new Consumer<Object[]>() {
                     @Override
-                    public void accept(@NonNull ResponseBody responseBody) throws Exception {
-                        if(writeResponseBodyToDisk(savePath,responseBody)){
+                    public void accept(@NonNull Object[] result) throws Exception {
+                        ResponseBody body = (ResponseBody) result[0];
+                        String fileName = "image_cache_" + System.currentTimeMillis() + result[1];
+                        if (writeResponseBodyToDisk(savePath, body, fileName)) {
                             long refreshTime = System.currentTimeMillis();
                             ImageCache cache = new ImageCache();
-                            cache.setSavePath(savePath);
+                            cache.setSavePath(savePath + File.separator + fileName);
                             cache.setRefreshTime(refreshTime);
-                            preferenceModePresenter.caveHomeImageCache(context,cache);
+                            preferenceModePresenter.caveHomeImageCache(context, cache);
                         }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        //不订阅Throwable的Consumer断网时会崩溃
                     }
                 });
     }
 
-    private boolean writeResponseBodyToDisk(String savePath, ResponseBody responseBody){
+    private boolean writeResponseBodyToDisk(String savePath, ResponseBody responseBody,String fileName){
+        DeBugLog.logWarning("imageCache","——writeResponseBodyToDisk savePath:"+savePath+" fileName:"+fileName);
         try {
-            File saveFile = new File(savePath);
+            File saveFile = new File(savePath,fileName);
             if(!saveFile.exists()){
-                saveFile.createNewFile();
+                if(saveFile.createNewFile())DeBugLog.logDebug("imageCache","create the new imageCache file");
             }
             InputStream inputStream = responseBody.byteStream();
             OutputStream outputStream = new FileOutputStream(saveFile);

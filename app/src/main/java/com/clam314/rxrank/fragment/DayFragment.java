@@ -169,7 +169,7 @@ public class DayFragment extends BaseFragment {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
 
             @Override

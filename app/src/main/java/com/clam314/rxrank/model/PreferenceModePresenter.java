@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.clam314.rxrank.entity.ImageCache;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 
 /**

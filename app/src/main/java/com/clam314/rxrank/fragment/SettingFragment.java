@@ -48,15 +48,6 @@ public class SettingFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-//        this.getPreferenceManager().findPreference(openModeKey).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//            @Override
-//            public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                if(preference instanceof CheckBoxPreference){
-//                    ConfigUtil.setOpenPageBySystem((Boolean)newValue);
-//                }
-//                return false;
-//            }
-//        });
     }
 
     private void initPreference(){
