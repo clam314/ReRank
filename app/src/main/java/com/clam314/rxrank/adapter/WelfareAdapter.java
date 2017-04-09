@@ -18,6 +18,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import com.clam314.rxrank.R;
+import com.clam314.rxrank.View.CircleProgressDrawable;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -64,8 +65,20 @@ public class WelfareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void setData(final ImageCardHolder holder, final Item item){
         Uri imageUri = null;
         if(item != null && !TextUtils.isEmpty(item.getUrl())){
+            FrescoUtil.setProgressBar(holder.draweeView, CircleProgressDrawable.newDefaultInstance(holder.draweeView.getContext()));
             imageUri = Uri.parse(item.getUrl());
             FrescoUtil.loadImage(imageUri,holder.draweeView,null,0,0,null);
+        }
+
+        if(imageUri == null){
+            holder.draweeView.setOnClickListener(null);
+        }else {
+            holder.draweeView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    zoomImageFromThumb(v,Uri.parse(item.getUrl()));
+                }
+            });
         }
 
         if(imageUri == null){
@@ -74,7 +87,7 @@ public class WelfareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.draweeView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    zoomImageFromThumb(v,Uri.parse(item.getUrl()));
+
                     return true;
                 }
             });

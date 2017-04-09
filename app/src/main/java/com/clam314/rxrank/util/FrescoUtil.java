@@ -21,17 +21,16 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
  */
 
 public class FrescoUtil {
-    public static void loadImage(Uri uri, SimpleDraweeView draweeView,
-                                 BasePostprocessor postprocessor,
+    public static void loadImage(Uri uri, SimpleDraweeView draweeView, BasePostprocessor postprocessor,
                                  int width, int height, BaseControllerListener<ImageInfo> listener){
-        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-//                .setPostprocessor(postprocessor)
-//                .setResizeOptions(new ResizeOptions(width,height))
+        ImageRequestBuilder requestBuilder = ImageRequestBuilder.newBuilderWithSource(uri)
                 .setProgressiveRenderingEnabled(true)//开启渐进式加载网络jpg
-                .setAutoRotateEnabled(true)//根据图片里保存的反向显示
-                .build();
+                .setAutoRotateEnabled(true);//根据图片里保存的反向显示
+        if(postprocessor != null)requestBuilder.setPostprocessor(postprocessor);
+        if(width!=0 && height!=0)requestBuilder.setResizeOptions(new ResizeOptions(width,height));
+
         PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                .setImageRequest(request)
+                .setImageRequest(requestBuilder.build())
                 .setControllerListener(listener)
                 .setOldController(draweeView.getController())
                 .setAutoPlayAnimations(true)//开启gif的动画播放
@@ -42,20 +41,5 @@ public class FrescoUtil {
     public static void setProgressBar(SimpleDraweeView draweeView, Drawable drawable){
         if(draweeView == null || drawable == null) return;
         draweeView.getHierarchy().setProgressBarImage(drawable);
-    }
-
-    public static BasePostprocessor getPosteProcessor(){
-        return new BasePostprocessor(){
-            @Override
-            public String getName() {
-                return "Postprocessor";
-            }
-
-            @Override
-            public CloseableReference<Bitmap> process(Bitmap sourceBitmap, PlatformBitmapFactory bitmapFactory) {
-                return super.process(sourceBitmap, bitmapFactory);
-            }
-
-        };
     }
 }

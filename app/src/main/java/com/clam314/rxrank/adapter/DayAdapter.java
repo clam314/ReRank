@@ -1,7 +1,6 @@
 package com.clam314.rxrank.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,9 +15,11 @@ import android.widget.TextView;
 
 
 import com.clam314.rxrank.R;
+import com.clam314.rxrank.View.CircleProgressDrawable;
 import com.clam314.rxrank.entity.CategoryGroup;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.http.Category;
+import com.clam314.rxrank.util.DeBugLog;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.clam314.rxrank.util.StringUtil;
 import com.clam314.rxrank.util.ViewUtil;
@@ -29,10 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -116,7 +114,7 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void setCategoryData(List<Item> items,List<TextView> tvContents, List<SimpleDraweeView> ivContents){
         for(int i = 0 ;i < Holder.eachCategoryMaxItem; i++){
             TextView tv = tvContents.get(i);
-            SimpleDraweeView iv = ivContents.get(i);
+            final SimpleDraweeView iv = ivContents.get(i);
             if(items != null && items.size() > i){
                 final Item item = items.get(i);
                 tv.setVisibility(View.VISIBLE);
@@ -128,18 +126,27 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     iv.setVisibility(View.GONE);
                 }else {
                     iv.setVisibility(View.VISIBLE);
-                    FrescoUtil.loadImage(Uri.parse(item.getImages().get(0)),iv,null,0,0,null);
+                    FrescoUtil.setProgressBar(iv, CircleProgressDrawable.newDefaultInstance(iv.getContext()));
+                    iv.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            DeBugLog.logInfo("imageViewSize","imageViewSize ——with:"+iv.getMeasuredWidth()+" ——height:"+iv.getMeasuredHeight());
+                            int ivWidth = iv.getMeasuredWidth();
+                            int ivHeight = iv.getMeasuredHeight();
+                            Uri uri = Uri.parse(item.getImages().get(0)+String.format(Locale.CHINA,"?imageView2/1/w/%d/h/%d",ivWidth,ivHeight));
+                            FrescoUtil.loadImage(uri,iv,null,0,0,null);
+                        }
+                    });
                 }
             }else {
                 tv.setVisibility(View.GONE);
                 iv.setVisibility(View.GONE);
             }
-
         }
     }
 
 
-    static class Holder extends RecyclerView.ViewHolder{
+    private static class Holder extends RecyclerView.ViewHolder{
         private static final int eachCategoryMaxItem = 5;
         SimpleDraweeView ivWelfare;
         TextView tvDay;

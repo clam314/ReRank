@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.clam314.rxrank.R;
+import com.clam314.rxrank.View.CircleProgressDrawable;
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.clam314.rxrank.util.StringUtil;
@@ -16,6 +17,7 @@ import com.clam314.rxrank.util.ViewUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,15 +59,25 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private void setData(ItemHolder holder,final Item item){
+    private void setData(final ItemHolder holder,final Item item){
         holder.tvAvatar.setText(StringUtil.getCharFromString(item.getWho(),0));
         holder.tvName.setText("· "+StringUtil.getShowStringNotNull(item.getWho()));
         holder.tvDescribe.setText(StringUtil.getShowStringNotNull(item.getDesc()));
         holder.tvTime.setText(StringUtil.getStringBeforePosition(item.getPublishedAt(),10));
         if(item.getImages() != null && item.getImages().size() > 0){
-            String url = item.getImages().get(0);
+            final String url = item.getImages().get(0);
             holder.draweeView.setVisibility(View.VISIBLE);
-            FrescoUtil.loadImage(Uri.parse(url), holder.draweeView, null, 0, 0, null);
+            FrescoUtil.setProgressBar(holder.draweeView, CircleProgressDrawable.newDefaultInstance(holder.draweeView.getContext()));
+            holder.draweeView.post(new Runnable() {
+                @Override
+                public void run() {
+                    int ivWidth = holder.draweeView.getMeasuredWidth();
+                    int ivHeight = holder.draweeView.getMeasuredHeight();
+                    Uri uri = Uri.parse(url+String.format(Locale.CHINA,"?imageView2/1/w/%d/h/%d",ivWidth,ivHeight));
+                    FrescoUtil.loadImage(uri, holder.draweeView, null, 0, 0, null);
+                }
+            });
+
         }else {
             holder.draweeView.setVisibility(View.GONE);
         }
