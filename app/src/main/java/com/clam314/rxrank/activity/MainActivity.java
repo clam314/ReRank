@@ -21,14 +21,10 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.clam314.rxrank.MainApplication;
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.entity.ImageCache;
-import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.presenter.DataPresenter;
-import com.clam314.rxrank.util.DeBugLog;
-import com.clam314.rxrank.util.FileUtil;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +34,7 @@ import io.reactivex.disposables.Disposable;
 public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.sv_main) SimpleDraweeView svImage;
+    private ObjectAnimator animator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +82,7 @@ public class MainActivity extends BaseActivity {
     private void startAnimator(View view){
         PropertyValuesHolder xHolder = PropertyValuesHolder.ofFloat("scaleX",1,1.1f);
         PropertyValuesHolder yHolder = PropertyValuesHolder.ofFloat("scaleY",1,1.1f);
-        ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(view,xHolder,yHolder);
+        animator = ObjectAnimator.ofPropertyValuesHolder(view,xHolder,yHolder);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(3000);
         animator.setRepeatCount(0);
@@ -103,5 +100,11 @@ public class MainActivity extends BaseActivity {
             }
         });
         animator.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(animator!=null && animator.isRunning()) animator.cancel();
     }
 }

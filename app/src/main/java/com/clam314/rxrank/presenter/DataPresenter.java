@@ -29,4 +29,6 @@ public interface DataPresenter {
     void loadHomeImage(Context context ,Observer<ImageCache> observer);
 
     void loadHomeImageCache(Context context,String savePath);
+
+    void shareImage(Context context,String url);
 }

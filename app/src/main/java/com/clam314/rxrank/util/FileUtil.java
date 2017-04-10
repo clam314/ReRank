@@ -32,4 +32,14 @@ public class FileUtil {
             return fileName.substring(fileName.lastIndexOf("."));
         }
     }
+
+    public static String getUrlName(String url){
+        if(TextUtils.isEmpty(url) || url.endsWith("/")){
+            return "unknown";
+        }else if(!url.contains("/")){
+            return url;
+        }else {
+            return url.substring(url.lastIndexOf("/")+1);
+        }
+    }
 }

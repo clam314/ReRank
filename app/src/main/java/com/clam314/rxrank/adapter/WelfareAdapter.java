@@ -17,9 +17,11 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
+import com.clam314.rxrank.MainApplication;
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.View.CircleProgressDrawable;
 import com.clam314.rxrank.entity.Item;
+import com.clam314.rxrank.presenter.DataPresenter;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -87,7 +89,7 @@ public class WelfareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             holder.draweeView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-
+                    MainApplication.getInstance().getPresenter(DataPresenter.class).shareImage(v.getContext(),item.getUrl());
                     return true;
                 }
             });

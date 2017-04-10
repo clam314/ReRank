@@ -1,5 +1,6 @@
 package com.clam314.rxrank.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -102,7 +103,10 @@ public class WebActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.share:
-
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT,mItem.getUrl());
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent,"分享到..."));
                 return true;
         }
         return super.onOptionsItemSelected(item);

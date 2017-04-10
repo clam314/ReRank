@@ -1,6 +1,9 @@
 package com.clam314.rxrank.presenter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.text.TextUtils;
 
 import com.clam314.rxrank.GlobalConfig;
 import com.clam314.rxrank.entity.CategoryGroup;
@@ -29,6 +32,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
@@ -169,5 +173,58 @@ public class DataPresenterImpl implements DataPresenter {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public void shareImage(final Context context, final String url) {
+        Observable.just(url)
+                .subscribeOn(Schedulers.io())
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(@NonNull String s) throws Exception {
+                        return !TextUtils.isEmpty(s);
+                    }
+                }).filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(@NonNull String s) throws Exception {
+                        File file = new File(FileUtil.getAppExternalStorageDirectory(),FileUtil.getUrlName(url));
+                        if(file.exists() && file.isFile()){
+                            Intent intent = new Intent(Intent.ACTION_SEND);
+                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                            intent.setType("image/*");
+                            context.startActivity(Intent.createChooser(intent,"分享到..."));
+                            return false;
+                        }
+                        return true;
+                    }
+                }).flatMap(new Function<String, ObservableSource<ResponseBody>>() {
+                    @Override
+                    public ObservableSource<ResponseBody> apply(@NonNull String s) throws Exception {
+                        return httpModelPresenter.downloadFile(url);
+                    }
+                }).subscribe(new Consumer<ResponseBody>() {
+                    @Override
+                    public void accept(@NonNull ResponseBody responseBody) throws Exception {
+                        String name = FileUtil.getUrlName(url);
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        if (writeResponseBodyToDisk(FileUtil.getAppExternalStorageDirectory(), responseBody, name)) {
+                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(FileUtil.getAppExternalStorageDirectory(),name)));
+                            intent.setType("image/*");
+                        } else {
+                            intent.putExtra(Intent.EXTRA_TEXT, url);
+                            intent.setType("text/plain");
+                        }
+                        context.startActivity(Intent.createChooser(intent, "分享到..."));
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.putExtra(Intent.EXTRA_TEXT,url);
+                        intent.setType("text/plain");
+                        context.startActivity(Intent.createChooser(intent,"分享到..."));
+                    }
+                });
+
     }
 }
