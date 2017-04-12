@@ -25,7 +25,6 @@ import io.reactivex.disposables.Disposable;
 
 
 public class WelfareFragment extends CategoryFragment {
-    private static final String TAG = WelfareFragment.class.getSimpleName();
     private static final String ARG_PARAM2 = "PARAM2";
     private boolean isRandom = false;
     private boolean refreshing = false;

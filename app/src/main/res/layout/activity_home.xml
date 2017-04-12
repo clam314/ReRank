@@ -53,10 +53,10 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nv_home"
-        android:layout_width="match_parent"
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:layout_marginRight="30dp"
+
         app:headerLayout="@layout/header_navigation_view"
         app:menu="@menu/menu_navigation"
         />

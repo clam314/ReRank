@@ -5,11 +5,9 @@ import android.content.Context;
 import com.clam314.rxrank.entity.CategoryGroup;
 import com.clam314.rxrank.entity.ImageCache;
 import com.clam314.rxrank.entity.Item;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 
 /**

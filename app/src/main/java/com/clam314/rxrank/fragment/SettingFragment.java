@@ -77,6 +77,15 @@ public class SettingFragment extends PreferenceFragmentCompat {
             intent.putExtra(WebActivity.PARAM_ITEM,item);
             startActivity(intent);
             return true;
+        }else if("thanks".equals(preference.getKey())){
+            String url = "http://gank.io";
+            String desc = "干货集中营";
+            Item item = new Item();
+            item.setUrl(url);
+            item.setDesc(desc);
+            Intent intent = new Intent(getContext(), WebActivity.class);
+            intent.putExtra(WebActivity.PARAM_ITEM,item);
+            startActivity(intent);
         }else if(openModeKey.equals(preference.getKey())){
             if(preference instanceof CheckBoxPreference){
                 ConfigUtil.setOpenPageBySystem(((CheckBoxPreference)preference).isChecked());

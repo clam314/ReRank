@@ -15,9 +15,7 @@ import com.clam314.rxrank.adapter.DayAdapter;
 import com.clam314.rxrank.adapter.LoadMoreViewHolder;
 import com.clam314.rxrank.adapter.LoadMoreWrapperAdapter;
 import com.clam314.rxrank.entity.CategoryGroup;
-import com.clam314.rxrank.http.Category;
 import com.clam314.rxrank.presenter.DataPresenter;
-import com.clam314.rxrank.util.DeBugLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +26,6 @@ import io.reactivex.disposables.Disposable;
 
 
 public class DayFragment extends BaseFragment {
-    private static final String TAG = DayFragment.class.getSimpleName();
-
     private static final String SAVE_HISTORY_DAY_LIST = "day_list";
     private static final String SAVE_DAY_POSITION = "day_position";
     private static final String SAVE_DATA_LIST = "data_list";
@@ -115,7 +111,6 @@ public class DayFragment extends BaseFragment {
             return;
         }
         final String day = historyDays.get(position);
-        DeBugLog.logError(TAG,"loadOneDayData"+" day:"+day);
         MainApplication.getInstance().getPresenter(DataPresenter.class).loadDayContents(new Observer<CategoryGroup>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -125,7 +120,6 @@ public class DayFragment extends BaseFragment {
             @Override
             public void onNext(CategoryGroup categoryGroup) {
                 if(categoryGroup == null){
-                    DeBugLog.logError(TAG,"loadOneDayData"+"onNext "+" showLoadComplete");
                     moreWrapperAdapter.showLoadComplete();
                 }else {
                     if(position == 0){
@@ -134,7 +128,6 @@ public class DayFragment extends BaseFragment {
                     categoryGroup.setDay(day);
                     dataList.add(categoryGroup);
                     moreWrapperAdapter.disableLoadMore();
-                    DeBugLog.logError(TAG,"loadOneDayData"+"onNext"+" disableLoadMore"+ " -dataList:size:"+dataList.size()+" -day:"+day);
                 }
             }
 
@@ -164,12 +157,11 @@ public class DayFragment extends BaseFragment {
                 if(historyDays != null && historyDays.size() > 0){
                     dayPosition = 0;
                 }
-                DeBugLog.logDebug(TAG,"historyDays:"+historyDays.size()+"-one:"+historyDays.get(0));
             }
 
             @Override
             public void onError(Throwable e) {
-//                e.printStackTrace();
+                e.printStackTrace();
             }
 
             @Override

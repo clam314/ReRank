@@ -8,6 +8,7 @@ import com.clam314.rxrank.entity.ImageCache;
 import com.clam314.rxrank.util.DeBugLog;
 
 import java.io.File;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 

@@ -27,6 +27,11 @@
             android:summary=" "
             />
         <Preference
+            android:title="感谢"
+            android:key="thanks"
+            android:summary="感谢网站http://gank.io提供的数据"
+            />
+        <Preference
             android:title="版本"
             android:key="version"
             android:summary="v1.0"

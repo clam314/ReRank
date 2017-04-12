@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.View.CircleProgressDrawable;
 import com.clam314.rxrank.entity.CategoryGroup;

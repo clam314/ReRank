@@ -1,9 +1,8 @@
 package com.clam314.rxrank.fragment;
 
-import android.support.v4.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import butterknife.Unbinder;
 
 
 public abstract class BaseFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private Unbinder unbinder;
 
     public BaseFragment() {
@@ -39,15 +37,6 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-}
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 }

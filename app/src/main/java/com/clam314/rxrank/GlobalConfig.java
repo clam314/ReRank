@@ -1,9 +1,5 @@
 package com.clam314.rxrank;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
 /**
  * Created by clam314 on 2017/4/5
  */

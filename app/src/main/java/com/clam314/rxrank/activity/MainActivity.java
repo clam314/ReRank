@@ -11,12 +11,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.transition.Transition;
-
 import android.transition.TransitionInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
-
 
 import com.clam314.rxrank.MainApplication;
 import com.clam314.rxrank.R;
@@ -25,14 +23,12 @@ import com.clam314.rxrank.presenter.DataPresenter;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 public class MainActivity extends BaseActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.sv_main) SimpleDraweeView svImage;
     private ObjectAnimator animator;
 
@@ -62,13 +58,13 @@ public class MainActivity extends BaseActivity {
                 if(!TextUtils.isEmpty(cache.getSavePath())){
                     FrescoUtil.loadImage(Uri.parse("file://"+ cache.getSavePath()),svImage,null,0,0,null);
                 }else {
-                    svImage.setImageURI((new Uri.Builder().scheme("res").path(String.valueOf(R.drawable.img_default))).build());
+                    svImage.setImageURI((new Uri.Builder().scheme("res").path(String.valueOf(R.drawable.image_default))).build());
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-                svImage.setImageURI((new Uri.Builder().scheme("res").path(String.valueOf(R.drawable.img_default))).build());
+                svImage.setImageURI((new Uri.Builder().scheme("res").path(String.valueOf(R.drawable.image_default))).build());
                 startAnimator(svImage);
             }
 

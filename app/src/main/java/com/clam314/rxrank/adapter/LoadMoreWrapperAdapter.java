@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.clam314.rxrank.util.DeBugLog;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by clam314 on 2017/3/31.

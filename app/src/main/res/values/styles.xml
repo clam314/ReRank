@@ -37,14 +37,24 @@
         <item name="preferenceScreenStyle">@style/Preference.PreferenceScreen</item>
         <item name="preferenceFragmentStyle">@style/PreferenceFragment</item>
         <item name="preferenceCategoryStyle">@style/Preference.Category</item>
-        <item name="preferenceStyle">@style/Preference</item>
+        <item name="preferenceStyle">@style/MyPreferenceStyle</item>
         <item name="preferenceInformationStyle">@style/Preference.Information</item>
-        <item name="checkBoxPreferenceStyle">@style/Preference.CheckBoxPreference</item>
+        <item name="checkBoxPreferenceStyle">@style/MyPreferenceStyle.checkBoxPreference</item>
         <item name="switchPreferenceCompatStyle">@style/Preference.SwitchPreferenceCompat</item>
-        <item name="dialogPreferenceStyle">@style/Preference.DialogPreference</item>
+        <item name="dialogPreferenceStyle">@style/MyPreferenceStyle</item>
         <item name="editTextPreferenceStyle">@style/Preference.DialogPreference.EditTextPreference</item>
         <item name="preferenceFragmentListStyle">@style/PreferenceFragmentList</item>
         <item name="android:background">@color/preference_setting_background_color</item>
+
+    </style>
+
+    <style name="MyPreferenceStyle">
+        <item name="android:layout">@layout/preference_item</item>
+    </style>
+
+    <style name="MyPreferenceStyle.checkBoxPreference">
+        <item name="android:layout">@layout/preference_item</item>
+        <item name="android:widgetLayout">@layout/preference_widget_checkbox</item>
     </style>
 
     <style name="TabLayout_Text_Appearance" parent="TextAppearance.Design.Tab">

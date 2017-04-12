@@ -1,13 +1,9 @@
 package com.clam314.rxrank.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +54,6 @@ public class CategoryFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DeBugLog.logWarning(TAG,mCategory+" onCreate"+ " savedInstanceState null: " +(savedInstanceState == null));
 
         if (getArguments() != null) {
             mCategory = getArguments().getString(ARG_PARAM1);
@@ -68,13 +63,10 @@ public class CategoryFragment extends BaseFragment {
         if(savedInstanceState != null){
             mItems = savedInstanceState.getParcelableArrayList(SAVE_ITEM_LIST);
             pageNo = savedInstanceState.getInt(SAVE_PAGE_NO);
-            DeBugLog.logWarning(TAG,mCategory+" onCreate savedInstanceState"+ " -itemlist size: "+mItems.size());
         }
         if(mItems == null){
             mItems = new ArrayList<>();
         }
-
-        DeBugLog.logWarning(TAG,mCategory+" onCreate"+ " -itemlist size: "+mItems.size());
     }
 
     @Override
@@ -107,31 +99,26 @@ public class CategoryFragment extends BaseFragment {
         DeBugLog.logWarning(TAG,mCategory+" doAfterInitView");
         if(savedInstanceState==null){
             loadData(pageNo);
-            DeBugLog.logWarning(TAG,mCategory+" doAfterInitView"+" loaddata page:"+pageNo);
         }
     }
 
     protected void loadData(final int page){
-        DeBugLog.logDebug(TAG,mCategory+" loadData page:"+ pageNo);
         MainApplication.getInstance().getPresenter(DataPresenter.class).loadCategoryContents(new Observer<List<Item>>() {
             @Override
             public void onSubscribe(Disposable d) {
                 pageNo++;
-                DeBugLog.logDebug(TAG,mCategory+" load data onSubscribe() page:"+ pageNo);
             }
 
             @Override
             public void onNext(List<Item> items) {
                 if(items == null || items.size() == 0 ){
                     moreAdapter.showLoadComplete();
-                    DeBugLog.logDebug(TAG,mCategory+" load data showLoadComplete() page:"+ pageNo);
                 }else {
                     if(page == 1){
                         mItems.clear();
                     }
                     mItems.addAll(items);
                     moreAdapter.disableLoadMore();
-                    DeBugLog.logDebug(TAG,mCategory+" load data disableLoadMore() page:"+ pageNo);
                 }
             }
 
@@ -143,7 +130,7 @@ public class CategoryFragment extends BaseFragment {
 
             @Override
             public void onComplete() {
-                DeBugLog.logDebug(TAG,mCategory+" load data onComplete() page:"+ pageNo);
+
             }
 
         },mCategory,10,page);
@@ -160,31 +147,6 @@ public class CategoryFragment extends BaseFragment {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(SAVE_ITEM_LIST,mItems);
         outState.putInt(SAVE_PAGE_NO,pageNo);
-        DeBugLog.logWarning(TAG,mCategory+" onSaveInstanceState"+" -pageNo:"+pageNo+" -mItems:"+mItems.size());
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        DeBugLog.logWarning(TAG,mCategory+" onAttach");
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        DeBugLog.logWarning(TAG,mCategory+" onDetach");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        DeBugLog.logWarning(TAG,mCategory+" onDestroyView");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        DeBugLog.logWarning(TAG,mCategory+" onDestroy");
     }
 
 }

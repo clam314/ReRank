@@ -3,7 +3,9 @@ package com.clam314.rxrank.util;
 
 import android.os.Environment;
 import android.text.TextUtils;
+
 import com.clam314.rxrank.GlobalConfig;
+
 import java.io.File;
 
 /**

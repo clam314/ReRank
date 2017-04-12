@@ -1,7 +1,9 @@
 package com.clam314.rxrank.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -31,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+    private static final String TAG = HomeActivity.class.getSimpleName();
     private static final String SAVE_CURRENT_ID = "current_id";
     @BindView(R.id.tb_home) Toolbar tbHome;
     @BindView(R.id.dl_home) DrawerLayout dlHome;
@@ -89,7 +92,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         tbHome.setTitle("首页");
         setSupportActionBar(tbHome);
         dlHome.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, dlHome, R.string.drawer_open, R.string.drawer_close);
+        ActionBarDrawerToggle mDrawerToggle = new DrawerListener(this, dlHome, R.string.drawer_open, R.string.drawer_close);
         mDrawerToggle.syncState();
         dlHome.addDrawerListener(mDrawerToggle);
         nvHome.setNavigationItemSelectedListener(this);
@@ -101,18 +104,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(SAVE_CURRENT_ID,currentFragmentId);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        DeBugLog.logError("home","onStart");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        DeBugLog.logError("home","onRestoreInstanceState");
     }
 
     @Override
@@ -192,4 +183,24 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             transaction.hide(from).show(to).commit();
         }
     }
+
+
+    private class DrawerListener extends ActionBarDrawerToggle{
+
+        DrawerListener(Activity activity, DrawerLayout drawerLayout, @StringRes int openDrawerContentDescRes, @StringRes int closeDrawerContentDescRes) {
+            super(activity, drawerLayout, openDrawerContentDescRes, closeDrawerContentDescRes);
+        }
+
+        @Override
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+            super.onDrawerSlide(drawerView, slideOffset);
+            if(drawerView instanceof NavigationView){
+                View view = ((NavigationView) drawerView).getHeaderView(0).findViewById(R.id.iv_item);
+                view.setRotation(360*slideOffset);
+            }
+
+        }
+
+    }
+
 }

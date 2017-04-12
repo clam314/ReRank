@@ -1,16 +1,15 @@
 package com.clam314.rxrank.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
@@ -58,6 +57,7 @@ public class WebActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebView(Item item){
         wbContent.loadUrl(item.getUrl());
         wbContent.setWebViewClient(new WebViewClient(){
@@ -69,6 +69,7 @@ public class WebActivity extends BaseActivity {
                 return super.shouldOverrideUrlLoading(view, request);
             }
 
+            @SuppressWarnings("deprecation")
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
@@ -87,6 +88,7 @@ public class WebActivity extends BaseActivity {
             }
         });
         wbContent.getSettings().setAllowFileAccess(true);
+        wbContent.getSettings().setJavaScriptEnabled(true);
     }
 
 
