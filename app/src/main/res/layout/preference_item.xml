@@ -32,6 +32,7 @@
                   android:layout_height="wrap_content"
                   android:maxLines="1"
                   android:textAppearance="?android:attr/textAppearanceLarge"
+                  android:textSize="18sp"
                   android:textColor="?android:attr/textColorPrimary"
                   android:ellipsize="marquee"
                   android:fadingEdge="horizontal" />
