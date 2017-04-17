@@ -1,15 +1,21 @@
 package com.clam314.rxrank.activity;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.pm.ActivityInfoCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -64,7 +70,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         initView();
         initFragments(savedInstanceState);
         ViewUtil.statusBarCompat(this,clHome);
-        DeBugLog.logError("home","onCreate");
+        requirePermission();
     }
 
     private void initFragments(Bundle savedInstanceState){
@@ -110,7 +116,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_toolbar,menu);
         changeRefreshIconVisibility(currentFragmentId);
-        DeBugLog.logError("home","onCreateOptionsMenu");
         return true;
     }
 
@@ -201,6 +206,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         }
 
+    }
+
+    private void requirePermission(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+            if(PackageManager.PERMISSION_GRANTED != checkSelfPermission(permission)){
+                if(shouldShowRequestPermissionRationale(permission)){
+                    Toast.makeText(this,"该权限仅因图片的保存所需",Toast.LENGTH_SHORT).show();
+                }
+                requestPermissions(new String[]{permission},1000);
+            }
+        }
     }
 
 }

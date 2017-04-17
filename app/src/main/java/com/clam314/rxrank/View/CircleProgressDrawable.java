@@ -58,12 +58,8 @@ public class CircleProgressDrawable extends Drawable {
 
     @Override
     protected boolean onLevelChange(int level) {
-        if(level-progress >=100){
-            progress = level;
-            return true;
-        }else {
-            return false;
-        }
+        progress = level;
+        return true;
     }
 
     @Override
