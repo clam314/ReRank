@@ -5,7 +5,12 @@
 ![image](https://github.com/clam314/Image/blob/master/gank_io_home.png?raw=true)<br>
 ![image](https://github.com/clam314/Image/blob/master/gank_io_welfare.png?raw=true)<br>
 #### 简介
-采用Retrofit、Rxjava、Fresco等流行开源库,实现MVP架构的App
+- 采用Retrofit、Rxjava、Fresco等流行开源库,实现MVP架构的App
+- 尽量符合material design的风格，适配了5.0及以上系统的navigation bar的透明
+- 实现了日间和夜间两种阅读模式
+- 实现了长按分享功能
+- 福利图点击可自动放大
+- 设置页面，可设置阅读模式，设置链接的打开方式
 
 <br>
 <br>
