@@ -3,6 +3,7 @@ package com.clam314.rxrank.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
@@ -52,6 +53,11 @@ public class ViewUtil {
             int statusBarHeight = getStatusBarHeight(activity);
             propUpView.setPadding(0,statusBarHeight,0,0);
         }
+    }
+
+    public static Drawable getSelectableItemBackground(Context context){
+        int[] attr = new int[]{android.R.attr.selectableItemBackground};
+        return context.getTheme().obtainStyledAttributes(attr).getDrawable(0);
     }
 
     public static void setClickListenerOpenItem(View clickView, final Item item){

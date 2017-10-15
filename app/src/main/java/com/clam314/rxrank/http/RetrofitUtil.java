@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitUtil {
     private volatile static Retrofit defaultRetrofit;
-
+    private volatile static Retrofit zhiHuRetrofit;
 
     public static Retrofit getDefault(){
         if(defaultRetrofit == null){
@@ -42,6 +42,32 @@ public class RetrofitUtil {
             }
         }
         return defaultRetrofit;
+    }
+
+    public static Retrofit getZhiHu() {
+        if(zhiHuRetrofit == null){
+            synchronized (RetrofitUtil.class){
+                OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+                //设置连接的超时时间
+                builder.readTimeout(10, TimeUnit.SECONDS);
+                builder.connectTimeout(10,TimeUnit.SECONDS);
+
+                if(BuildConfig.DEBUG){
+                    //HttpLoggingInterceptor 是一个拦截器，用于输出网络请求和结果的Log
+                    HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+                    interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                    builder.addInterceptor(interceptor);
+                }
+
+                zhiHuRetrofit = new Retrofit.Builder()
+                        .baseUrl(ZhiHuConfig.BASE_URL)
+                        .client(builder.build())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                        .build();
+            }
+        }
+        return zhiHuRetrofit;
     }
 
 }

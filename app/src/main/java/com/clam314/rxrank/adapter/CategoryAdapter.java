@@ -97,7 +97,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         @BindView(R.id.tv_avatar) TextView tvAvatar;
         @BindView(R.id.tv_share) TextView tvShare;
         @BindView(R.id.iv_image) SimpleDraweeView draweeView;
-        @BindView(R.id.card_category) CardView cardView;
+        @BindView(R.id.card_category) View cardView;
 
         ItemHolder(View itemView) {
             super(itemView);

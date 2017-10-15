@@ -28,9 +28,11 @@ import android.widget.Toast;
 
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.fragment.BaseFragment;
+import com.clam314.rxrank.fragment.BaseHomeFragment;
 import com.clam314.rxrank.fragment.HomeFragment;
 import com.clam314.rxrank.fragment.SettingFragment;
 import com.clam314.rxrank.fragment.WelfareFragment;
+import com.clam314.rxrank.fragment.zhihu.ZhiHuHomeFragment;
 import com.clam314.rxrank.http.Category;
 import com.clam314.rxrank.util.DeBugLog;
 import com.clam314.rxrank.util.ViewUtil;
@@ -52,7 +54,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             R.id.menu_collection,
             R.id.menu_welfare,
             R.id.menu_settings,
-            R.id.menu_help
+            R.id.menu_help,
+            R.id.menu_zhi_hu
     };
 
     private SparseArray<Fragment> drawerFragments;
@@ -81,6 +84,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             drawerFragments.put(MENU_ID[2], WelfareFragment.newInstance(Category.welfare,true));
             drawerFragments.put(MENU_ID[3], SettingFragment.newInstance());
             drawerFragments.put(MENU_ID[4],null);
+            drawerFragments.put(MENU_ID[5], ZhiHuHomeFragment.newInstance());
         }
 
         if(savedInstanceState == null){
@@ -167,10 +171,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void changeTabLayoutStatus(CharSequence title, int itemId){
         tbHome.setTitle(title);
-        if(currentFragmentId == MENU_ID[0]){
-            tabHome.setVisibility(View.GONE);
-        }else if(itemId == MENU_ID[0]){
+        if(itemId == MENU_ID[0]||itemId == MENU_ID[5]){
             tabHome.setVisibility(View.VISIBLE);
+            Fragment fragment = drawerFragments.get(itemId);
+            if(fragment instanceof BaseHomeFragment){
+                ((BaseHomeFragment)fragment).onChangeTabLayout();
+            }
         }else {
             tabHome.setVisibility(View.GONE);
         }

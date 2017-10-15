@@ -8,10 +8,14 @@ import android.support.v7.app.AppCompatDelegate;
 
 import com.clam314.rxrank.presenter.DataPresenter;
 import com.clam314.rxrank.presenter.DataPresenterImpl;
+import com.clam314.rxrank.presenter.ZhiHuDataPresenter;
+import com.clam314.rxrank.presenter.ZhiHuDataPresenterImpl;
 import com.clam314.rxrank.util.ConfigUtil;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.internal.Supplier;
+import com.facebook.common.logging.FLog;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.backends.okhttp3.OkHttpImagePipelineConfigFactory;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 
 import java.io.File;
@@ -51,6 +55,7 @@ public class MainApplication extends Application {
     private void initPresenter(){
         presenterMap = new ArrayMap<>();
         presenterMap.put(DataPresenter.class, new DataPresenterImpl());
+        presenterMap.put(ZhiHuDataPresenter.class, new ZhiHuDataPresenterImpl());
     }
 
     /*
@@ -76,6 +81,7 @@ public class MainApplication extends Application {
                 .setBitmapsConfig(Bitmap.Config.RGB_565)
                 .build();
         Fresco.initialize(getApplicationContext(), imagePipelineConfig);
+        FLog.setMinimumLoggingLevel(FLog.VERBOSE);
     }
 
     public <T> T getPresenter(Class<T> presenterClass){

@@ -24,6 +24,9 @@ public class StringUtil {
     }
 
     public static String getCharFromString(String s,int position){
+        if(!TextUtils.isEmpty(s)){
+            s = s.trim();
+        }
         if(TextUtils.isEmpty(s)|| s.length() < position + 1){
             return " ";
         }else {

@@ -8,9 +8,6 @@
     <string name="title_activity_base">BaseActivity</string>
 
 
-
-
-
     <!--设置页面-->
     <string name="setting_group_normal">一般设置</string>
     <string name="setting_show_mode">显示模式</string>
