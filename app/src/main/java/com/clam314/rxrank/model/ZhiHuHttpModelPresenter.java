@@ -1,6 +1,10 @@
 package com.clam314.rxrank.model;
 
 import com.clam314.rxrank.entity.zhihu.DailyNews;
+import com.clam314.rxrank.entity.zhihu.Theme;
+import com.clam314.rxrank.entity.zhihu.Themes;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -10,4 +14,6 @@ import io.reactivex.Observable;
 
 public interface ZhiHuHttpModelPresenter {
     Observable<DailyNews> loadDailyNews(String day);
+
+    Observable<List<Theme>> loadThemeList();
 }

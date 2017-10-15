@@ -77,16 +77,8 @@ public class DailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 } else {
                     iv.setVisibility(View.VISIBLE);
                     FrescoUtil.setProgressBar(iv, CircleProgressDrawable.newDefaultInstance(iv.getContext()));
-                    iv.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            DeBugLog.logInfo("imageViewSize", "imageViewSize ——with:" + iv.getMeasuredWidth() + " ——height:" + iv.getMeasuredHeight());
-                            int ivWidth = iv.getMeasuredWidth();
-                            int ivHeight = iv.getMeasuredHeight();
-                            Uri uri = Uri.parse(item.getImages().get(0) + String.format(Locale.CHINA, "?imageView2/1/w/%d/h/%d", ivWidth, ivHeight));
-                            FrescoUtil.loadImage(uri, iv, null, 0, 0, null);
-                        }
-                    });
+                    Uri uri = Uri.parse(item.getImages().get(0));
+                    FrescoUtil.loadImage(uri, iv, null, 0, 0, null);
                 }
             } else {
                 tv.setVisibility(View.GONE);

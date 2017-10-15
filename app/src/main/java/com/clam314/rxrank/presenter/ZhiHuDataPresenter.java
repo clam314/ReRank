@@ -1,6 +1,9 @@
 package com.clam314.rxrank.presenter;
 
 import com.clam314.rxrank.entity.zhihu.DailyNews;
+import com.clam314.rxrank.entity.zhihu.Theme;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -11,4 +14,6 @@ import io.reactivex.Observer;
 
 public interface ZhiHuDataPresenter {
     void loadNews(Observer<DailyNews> Observer, String day);
+
+    void loadThemeList(Observer<List<Theme>> observer);
 }

@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.clam314.rxrank.MainApplication;
 import com.clam314.rxrank.R;
@@ -21,6 +22,7 @@ import com.clam314.rxrank.entity.zhihu.DailyNews;
 import com.clam314.rxrank.fragment.BaseFragment;
 import com.clam314.rxrank.presenter.ZhiHuDataPresenter;
 import com.clam314.rxrank.util.DeBugLog;
+import com.clam314.rxrank.util.TimeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ public class DailyFragment extends BaseFragment {
     private static final String SAVE_DATA_LIST = "data_list";
     @BindView(R.id.rv_daily)
     RecyclerView recyclerView;
+    @BindView(R.id.tv_day)
+    TextView tvDate;
     private LoadMoreWrapperAdapter moreWrapperAdapter;
 
 
@@ -97,6 +101,19 @@ public class DailyFragment extends BaseFragment {
             }
         });
         recyclerView.setAdapter(moreWrapperAdapter);
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//                int position = manager.findFirstVisibleItemPosition();
+//                if(position>= 0 && position < dataList.size()){
+//                    tvDate.setVisibility(View.VISIBLE);
+//                    tvDate.setText(TimeUtil.timeForm(dataList.get(position).getDate(),"yyyyMMdd","MM/dd"));
+//                }else {
+//                    tvDate.setVisibility(View.GONE);
+//                }
+//            }
+//        });
     }
 
     @Override

@@ -4,10 +4,11 @@
              android:layout_height="match_parent"
              tools:context="com.clam314.rxrank.fragment.zhihu.ThemeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_theme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:background="@color/fragment_background_color"/>
 
 </FrameLayout>

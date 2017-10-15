@@ -2,10 +2,12 @@ package com.clam314.rxrank.presenter;
 
 import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.entity.zhihu.DailyNews;
+import com.clam314.rxrank.entity.zhihu.Theme;
 import com.clam314.rxrank.model.ZhiHuHttpModelPresenter;
 import com.clam314.rxrank.model.ZhiHuHttpModelPresenterlmpl;
 
 
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -26,6 +28,14 @@ public class ZhiHuDataPresenterImpl implements ZhiHuDataPresenter {
     @Override
     public void loadNews(Observer<DailyNews> observer, String day) {
         Observable<DailyNews> observable = zhiHuHttpModelPresenter.loadDailyNews(day);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    @Override
+    public void loadThemeList(Observer<List<Theme>> observer) {
+        Observable<List<Theme>> observable = zhiHuHttpModelPresenter.loadThemeList();
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);

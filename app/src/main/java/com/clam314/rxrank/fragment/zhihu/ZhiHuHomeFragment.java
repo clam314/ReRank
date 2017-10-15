@@ -28,14 +28,14 @@ public class ZhiHuHomeFragment extends BaseHomeFragment {
     @Override
     protected void initFragmentList(View view,List<String> titles, List<BaseFragment> fragments){
         titles.add("每日合集");
-        titles.add("妹子图");
+        titles.add("主题日报");
         for(String s : titles){
             switch (s) {
                 case "每日合集":
                     fragments.add(DailyFragment.newInstance());
                     break;
-                case "妹子图":
-                    fragments.add(WelfareFragment.newInstance(Category.welfare,false));
+                case "主题日报":
+                    fragments.add(ThemeFragment.newInstance());
                     break;
                 default:
                     fragments.add(CategoryFragment.newInstance(s));
