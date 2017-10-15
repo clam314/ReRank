@@ -1,6 +1,8 @@
 package com.clam314.rxrank.model;
 
 import com.clam314.rxrank.entity.zhihu.DailyNews;
+import com.clam314.rxrank.entity.zhihu.Section;
+import com.clam314.rxrank.entity.zhihu.Sections;
 import com.clam314.rxrank.entity.zhihu.Theme;
 import com.clam314.rxrank.entity.zhihu.Themes;
 import com.clam314.rxrank.http.RetrofitUtil;
@@ -34,6 +36,16 @@ public class ZhiHuHttpModelPresenterlmpl implements ZhiHuHttpModelPresenter {
             @Override
             public List<Theme> apply(@NonNull Themes themes) throws Exception {
                 return themes.getOthers();
+            }
+        });
+    }
+
+    @Override
+    public Observable<List<Section>> loadSectionList() {
+        return api.getSectionList().map(new Function<Sections, List<Section>>() {
+            @Override
+            public List<Section> apply(@NonNull Sections sections) throws Exception {
+                return sections.getData();
             }
         });
     }

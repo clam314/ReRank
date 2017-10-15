@@ -1,6 +1,7 @@
 package com.clam314.rxrank.model;
 
 import com.clam314.rxrank.entity.zhihu.DailyNews;
+import com.clam314.rxrank.entity.zhihu.Section;
 import com.clam314.rxrank.entity.zhihu.Theme;
 import com.clam314.rxrank.entity.zhihu.Themes;
 
@@ -16,4 +17,6 @@ public interface ZhiHuHttpModelPresenter {
     Observable<DailyNews> loadDailyNews(String day);
 
     Observable<List<Theme>> loadThemeList();
+
+    Observable<List<Section>> loadSectionList();
 }

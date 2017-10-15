@@ -23,7 +23,9 @@ import butterknife.BindView;
 public abstract class BaseHomeFragment extends BaseFragment {
     @BindView(R.id.vp_home)
     ViewPager viewPager;
-    public TabLayout mTabLayout;
+
+    protected TabLayout mTabLayout;
+    protected int mPageLimit = 3;
     private boolean isStart;
 
     private List<BaseFragment> fragments;
@@ -44,7 +46,7 @@ public abstract class BaseHomeFragment extends BaseFragment {
         initFragmentList(view, titles, fragments);
         TabAdapter tabAdapter = new TabAdapter(titles, fragments, getChildFragmentManager());
         viewPager.setAdapter(tabAdapter);
-        viewPager.setOffscreenPageLimit(0);
+        viewPager.setOffscreenPageLimit(mPageLimit);
     }
 
     protected abstract void initFragmentList(View view, List<String> titles, List<BaseFragment> fragments);

@@ -1,6 +1,8 @@
 package com.clam314.rxrank.http;
 
 import com.clam314.rxrank.entity.zhihu.DailyNews;
+import com.clam314.rxrank.entity.zhihu.Section;
+import com.clam314.rxrank.entity.zhihu.Sections;
 import com.clam314.rxrank.entity.zhihu.ThemeContent;
 import com.clam314.rxrank.entity.zhihu.Themes;
 
@@ -25,4 +27,7 @@ public interface ZhiHuApi {
 
     @GET(ZhiHuConfig.THEMES_CONTENT_OLD)
     Observable<ThemeContent> getThemeContent(@Path("themeId") String themeId, @Path("id") String id);
+
+    @GET(ZhiHuConfig.SECTION_LIST)
+    Observable<Sections> getSectionList();
 }

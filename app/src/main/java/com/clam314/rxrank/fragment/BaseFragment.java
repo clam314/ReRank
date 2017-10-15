@@ -16,6 +16,7 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment extends Fragment {
     private String TAG = getClass().getSimpleName();
+    private static final boolean openAfterLoad = false;
     private Unbinder unbinder;
     private boolean isFirst;
     private boolean isOk;
@@ -29,7 +30,7 @@ public abstract class BaseFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         DeBugLog.logInfo(TAG,"setUserVisibleHint-"+isFirst+"-"+isVisibleToUser);
-        if(!isFirst && isVisibleToUser){
+        if(openAfterLoad && !isFirst && isVisibleToUser){
             isFirst = true;
             if(rootView != null) doAfterInitView(rootView,mSave);
             isOk = true;
@@ -44,7 +45,7 @@ public abstract class BaseFragment extends Fragment {
         unbinder = ButterKnife.bind(this,rootView);
         initView(rootView);
         DeBugLog.logInfo(TAG,"onCreateView-"+isFirst);
-        if(isOk) doAfterInitView(rootView,savedInstanceState);
+        if(isOk || !openAfterLoad) doAfterInitView(rootView,savedInstanceState);
         return rootView;
     }
 

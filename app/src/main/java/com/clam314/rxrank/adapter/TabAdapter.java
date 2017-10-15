@@ -3,6 +3,7 @@ package com.clam314.rxrank.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.clam314.rxrank.fragment.BaseFragment;
