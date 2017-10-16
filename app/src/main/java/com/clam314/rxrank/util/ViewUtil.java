@@ -60,6 +60,15 @@ public class ViewUtil {
         return context.getTheme().obtainStyledAttributes(attr).getDrawable(0);
     }
 
+    public static int getColorByResource(Context context, int resId){
+        if( Build.VERSION.SDK_INT > 21){
+            return context.getResources().getColor(resId,context.getTheme());
+        }else {
+            return context.getResources().getColor(resId);
+        }
+
+    }
+
     public static void setClickListenerOpenItem(View clickView, final Item item){
         if(item == null || TextUtils.isEmpty(item.getUrl())){
             Toast.makeText(clickView.getContext(),"数据有误,不能打开  :(",Toast.LENGTH_SHORT).show();

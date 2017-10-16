@@ -1,8 +1,6 @@
 package com.clam314.rxrank.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -13,14 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.clam314.rxrank.R;
 import com.clam314.rxrank.View.CircleProgressDrawable;
 import com.clam314.rxrank.entity.zhihu.DailyNews;
 import com.clam314.rxrank.entity.zhihu.Story;
-import com.clam314.rxrank.util.DeBugLog;
 import com.clam314.rxrank.util.FrescoUtil;
 import com.clam314.rxrank.util.TimeUtil;
 import com.clam314.rxrank.util.ViewUtil;
@@ -29,7 +25,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by clam314 on 2017/10/15
@@ -78,7 +73,8 @@ public class DailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     iv.setVisibility(View.VISIBLE);
                     FrescoUtil.setProgressBar(iv, CircleProgressDrawable.newDefaultInstance(iv.getContext()));
                     Uri uri = Uri.parse(item.getImages().get(0));
-                    FrescoUtil.loadImage(uri, iv, null, 0, 0, null);
+//                    FrescoUtil.loadImage(uri, iv, null, 0, 0, null);
+                    FrescoUtil.loadImage(iv,uri);
                 }
             } else {
                 tv.setVisibility(View.GONE);
@@ -115,6 +111,7 @@ public class DailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         void createView(Context context) {
+            int colorInt = ViewUtil.getColorByResource(context, R.color.item_category_title_color);
             for (int i = 0; i < eachCategoryMaxItem; i++) {
                 TextView tv = new TextView(context);
                 FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -122,7 +119,7 @@ public class DailyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 tv.setLayoutParams(lp);
                 tv.setText("Content");
                 tv.setTextSize(16f);
-                tv.setTextColor(Color.GRAY);
+                tv.setTextColor(colorInt);
                 Drawable drawable = context.getResources().getDrawable(R.drawable.shape_little_circle);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 tv.setCompoundDrawables(drawable, null, null, null);

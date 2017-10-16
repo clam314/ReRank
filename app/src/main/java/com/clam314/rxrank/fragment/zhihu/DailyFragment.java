@@ -4,7 +4,6 @@ package com.clam314.rxrank.fragment.zhihu;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,13 +21,10 @@ import com.clam314.rxrank.entity.zhihu.DailyNews;
 import com.clam314.rxrank.fragment.BaseFragment;
 import com.clam314.rxrank.presenter.ZhiHuDataPresenter;
 import com.clam314.rxrank.util.DeBugLog;
-import com.clam314.rxrank.util.TimeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -101,6 +97,9 @@ public class DailyFragment extends BaseFragment {
             }
         });
         recyclerView.setAdapter(moreWrapperAdapter);
+        recyclerView.setItemViewCacheSize(30);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 //        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
 //            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

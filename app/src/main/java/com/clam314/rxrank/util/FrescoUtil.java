@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
@@ -17,21 +17,26 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
  */
 
 public class FrescoUtil {
-    public static void loadImage(Uri uri, SimpleDraweeView draweeView, BasePostprocessor postprocessor,
+    public static void loadImage(Uri uri, final SimpleDraweeView draweeView, BasePostprocessor postprocessor,
                                  int width, int height, BaseControllerListener<ImageInfo> listener){
         ImageRequestBuilder requestBuilder = ImageRequestBuilder.newBuilderWithSource(uri)
                 .setProgressiveRenderingEnabled(true)//开启渐进式加载网络jpg
-                .setAutoRotateEnabled(true);//根据图片里保存的反向显示
+                .setAutoRotateEnabled(true);//图片和屏幕方向一致显示
         if(postprocessor != null)requestBuilder.setPostprocessor(postprocessor);
         if(width!=0 && height!=0)requestBuilder.setResizeOptions(new ResizeOptions(width,height));
 
-        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                .setImageRequest(requestBuilder.build())
-                .setControllerListener(listener)
+        PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder()
                 .setOldController(draweeView.getController())
-                .setAutoPlayAnimations(true)//开启gif的动画播放
-                .build();
-        draweeView.setController(controller);
+                .setImageRequest(requestBuilder.build())
+                .setAutoPlayAnimations(true);//开启gif的动画播放
+        if(listener != null) {
+            controller.setControllerListener(listener);
+        }
+        draweeView.setController(controller.build());
+    }
+
+    public static void loadImage(SimpleDraweeView draweeView,Uri uri){
+        draweeView.setImageURI(uri);
     }
 
     public static void setProgressBar(SimpleDraweeView draweeView, Drawable drawable){

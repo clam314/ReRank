@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 import com.clam314.rxrank.R;
+import com.clam314.rxrank.util.DeBugLog;
 
 import java.util.Locale;
 
@@ -22,6 +23,7 @@ import java.util.Locale;
  */
 
 public class CircleProgressDrawable extends Drawable {
+    private static final String TAG = CircleProgressDrawable.class.getSimpleName();
     private static final int MAX_PROGRESS = 10000;
     private int progress;
     private Paint mPaint;
@@ -59,11 +61,13 @@ public class CircleProgressDrawable extends Drawable {
     @Override
     protected boolean onLevelChange(int level) {
         progress = level;
+        DeBugLog.logError(TAG,"onLevelChange:"+level);
         return true;
     }
 
     @Override
     public void draw(@NonNull Canvas canvas) {
+        DeBugLog.logError(TAG,"draw:"+progress);
         canvas.translate(canvas.getWidth()/2,canvas.getHeight()/2);
         mPaint.setStrokeWidth(ringWidth);
         mPaint.setStyle(Paint.Style.STROKE);
