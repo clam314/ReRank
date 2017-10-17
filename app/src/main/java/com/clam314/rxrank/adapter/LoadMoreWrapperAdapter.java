@@ -86,6 +86,13 @@ public class LoadMoreWrapperAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         notifyDataSetChanged();
     }
 
+    public void disableLoadMore(int oldItemCount,int newItemCount){
+        mCurrentItemType = ITEM_TYPE_NO_VIEW;
+        isHaveStatesView = false;
+        isLoading = false;
+        notifyItemRangeInserted(oldItemCount,newItemCount);
+    }
+
     public void setLoadStatusViewHolder(RecyclerView.ViewHolder loadMore, RecyclerView.ViewHolder loadFailed, RecyclerView.ViewHolder loadNoMore){
         if(loadMore != null) mLoadMoreHolder = loadMore;
         if(loadFailed != null) mLoadFailedHolder = loadFailed;

@@ -1,14 +1,11 @@
 package com.clam314.rxrank.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.clam314.rxrank.R;
-import com.clam314.rxrank.entity.Item;
 import com.clam314.rxrank.entity.zhihu.Section;
 import com.clam314.rxrank.entity.zhihu.Theme;
 import com.clam314.rxrank.util.StringUtil;
@@ -63,12 +60,6 @@ public class ThemeActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
-            case R.id.share:
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, mItem.getUrl());
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, "分享到..."));
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -3,16 +3,17 @@ package com.clam314.rxrank.entity.zhihu;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class DailyNews implements Parcelable {
 
     @SerializedName("date")
     @Expose
     private String date;
+    private String showDate;
     @SerializedName("stories")
     @Expose
     private List<Story> stories = null;
@@ -23,6 +24,14 @@ public class DailyNews implements Parcelable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(String showDate) {
+        this.showDate = showDate;
     }
 
     public List<Story> getStories() {
@@ -41,7 +50,8 @@ public class DailyNews implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.date);
-        dest.writeList(this.stories);
+        dest.writeString(this.showDate);
+        dest.writeTypedList(this.stories);
     }
 
     public DailyNews() {
@@ -49,8 +59,8 @@ public class DailyNews implements Parcelable {
 
     protected DailyNews(Parcel in) {
         this.date = in.readString();
-        this.stories = new ArrayList<Story>();
-        in.readList(this.stories, Story.class.getClassLoader());
+        this.showDate = in.readString();
+        this.stories = in.createTypedArrayList(Story.CREATOR);
     }
 
     public static final Creator<DailyNews> CREATOR = new Creator<DailyNews>() {

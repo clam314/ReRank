@@ -1,7 +1,6 @@
 package com.clam314.rxrank.fragment.zhihu;
 
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,13 +17,16 @@ import com.clam314.rxrank.adapter.DailyAdapter;
 import com.clam314.rxrank.adapter.LoadMoreViewHolder;
 import com.clam314.rxrank.adapter.LoadMoreWrapperAdapter;
 import com.clam314.rxrank.entity.zhihu.DailyNews;
+import com.clam314.rxrank.entity.zhihu.Story;
 import com.clam314.rxrank.fragment.BaseFragment;
 import com.clam314.rxrank.presenter.ZhiHuDataPresenter;
 import com.clam314.rxrank.util.DeBugLog;
+import com.clam314.rxrank.util.TimeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -47,6 +49,8 @@ public class DailyFragment extends BaseFragment {
     private String queryDay;
     private String lastDay;
     private ArrayList<DailyNews> dataList;
+    private ArrayList<Story> stories;
+
 
     public DailyFragment() {
     }
@@ -65,11 +69,11 @@ public class DailyFragment extends BaseFragment {
         calendar.add(Calendar.DAY_OF_WEEK,1);
         lastDay = dateFormat.format(calendar.getTime());
         if(savedInstanceState != null){
-            dataList = savedInstanceState.getParcelableArrayList(SAVE_DATA_LIST);
+            stories = savedInstanceState.getParcelableArrayList(SAVE_DATA_LIST);
             queryDay = savedInstanceState.getString(SAVE_DAY_QUERY);
         }else {
             queryDay = lastDay;
-            dataList = new ArrayList<>();
+            stories = new ArrayList<>();
         }
 
     }
@@ -81,8 +85,10 @@ public class DailyFragment extends BaseFragment {
 
     @Override
     protected void initView(View view) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        moreWrapperAdapter = new LoadMoreWrapperAdapter(new DailyAdapter(dataList));
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
+        manager.setItemPrefetchEnabled(true);
+        recyclerView.setLayoutManager(manager);
+        moreWrapperAdapter = new LoadMoreWrapperAdapter(new DailyAdapter(stories));
         moreWrapperAdapter.setLoadStatusViewHolder(LoadMoreViewHolder.newInstance(getContext()),null,null);
         moreWrapperAdapter.setOnLoadListener(new LoadMoreWrapperAdapter.OnLoadListener() {
             @Override
@@ -131,7 +137,7 @@ public class DailyFragment extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(SAVE_DATA_LIST,dataList);
+        outState.putParcelableArrayList(SAVE_DATA_LIST,stories);
         outState.putString(SAVE_DAY_QUERY,queryDay);
     }
 
@@ -145,15 +151,24 @@ public class DailyFragment extends BaseFragment {
 
             @Override
             public void onNext(DailyNews dailyNews) {
-                if(dailyNews != null){
+                if(dailyNews != null && dailyNews.getStories() != null && !dailyNews.getStories().isEmpty()){
+                    boolean refresh = false;
                     if(lastDay.equals(queryDay)){
-                        dataList.clear();
+                        refresh = true;
+                        stories.clear();
                     }
+                    List<Story> storyList = dailyNews.getStories();
                     if(!TextUtils.isEmpty(dailyNews.getDate())){
                         queryDay = dailyNews.getDate();
+                        storyList.get(0).setShowDate(TimeUtil.timeForm(dailyNews.getDate(),"yyyyMMdd","MM/dd"));
                     }
-                    dataList.add(dailyNews);
-                    moreWrapperAdapter.disableLoadMore();
+                    int oldItemCount = stories.size();
+                    stories.addAll(storyList);
+                    if(refresh){
+                        moreWrapperAdapter.disableLoadMore();
+                    }else {
+                        moreWrapperAdapter.disableLoadMore(oldItemCount,storyList.size());
+                    }
                 }else {
                     moreWrapperAdapter.showLoadComplete();
                 }

@@ -3,9 +3,10 @@ package com.clam314.rxrank.entity.zhihu;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Story implements Parcelable{
 
@@ -24,6 +25,16 @@ public class Story implements Parcelable{
     @SerializedName("title")
     @Expose
     private String title;
+
+    private String showDate;
+
+    public String getShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(String showDate) {
+        this.showDate = showDate;
+    }
 
     public List<String> getImages() {
         return images;
@@ -77,6 +88,7 @@ public class Story implements Parcelable{
         dest.writeValue(this.id);
         dest.writeString(this.gaPrefix);
         dest.writeString(this.title);
+        dest.writeString(this.showDate);
     }
 
     public Story() {
@@ -88,6 +100,7 @@ public class Story implements Parcelable{
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.gaPrefix = in.readString();
         this.title = in.readString();
+        this.showDate = in.readString();
     }
 
     public static final Creator<Story> CREATOR = new Creator<Story>() {

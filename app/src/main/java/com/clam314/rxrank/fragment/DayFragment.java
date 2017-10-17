@@ -67,7 +67,9 @@ public class DayFragment extends BaseFragment {
 
     @Override
     protected void initView(View view) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext());
+        manager.setItemPrefetchEnabled(true);
+        recyclerView.setLayoutManager(manager);
         moreWrapperAdapter = new LoadMoreWrapperAdapter(new DayAdapter(dataList));
         moreWrapperAdapter.setLoadStatusViewHolder(LoadMoreViewHolder.newInstance(getContext()),null,null);
         moreWrapperAdapter.setOnLoadListener(new LoadMoreWrapperAdapter.OnLoadListener() {
